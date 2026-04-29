@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juan Valdez Café – El café de todo un país</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rojo: #C8102E;
+    --rojo-oscuro: #9B0E24;
+    --cafe: #3B1A0E;
+    --cafe-medio: #6B3A2A;
+    --dorado: #C9973A;
+    --crema: #F9F3EC;
+    --blanco: #FFFFFF;
+    --verde: #2D5016;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--crema);
+    color: var(--cafe);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(59,26,14,0.96);
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 68px;
+    border-bottom: 2px solid var(--rojo);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 900;
+    color: var(--blanco); letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--rojo); }
+
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.82);
+    text-decoration: none;
+    font-size: 0.88rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--dorado); }
+
+  .nav-cta {
+    background: var(--rojo);
+    color: var(--blanco) !important;
+    padding: 0.45rem 1.2rem;
+    border-radius: 100px;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--rojo-oscuro) !important; color: var(--blanco) !important; }
+
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 25px; height: 2px;
+    background: var(--blanco);
+    transition: all 0.3s;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--cafe) 0%, #1a0a05 60%, #3B1A0E 100%);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    position: relative; overflow: hidden;
+    padding: 100px 5% 60px;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(200,16,46,0.18) 0%, transparent 70%);
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(8rem, 20vw, 22rem);
+    font-weight: 900; color: rgba(255,255,255,0.03);
+    letter-spacing: -0.05em;
+    user-select: none; pointer-events: none;
+    top: 50%; transform: translateY(-50%);
+    white-space: nowrap;
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 760px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(200,16,46,0.25);
+    border: 1px solid rgba(200,16,46,0.5);
+    color: #ff8fa0; font-size: 0.78rem; letter-spacing: 0.12em;
+    text-transform: uppercase; padding: 0.35rem 1rem;
+    border-radius: 100px; margin-bottom: 1.8rem;
+    animation: fadeInDown 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 900; color: var(--blanco);
+    line-height: 1.05;
+    animation: fadeInUp 0.9s 0.1s ease both;
+  }
+  .hero h1 em { color: var(--rojo); font-style: italic; }
+
+  .hero p {
+    color: rgba(255,255,255,0.7);
+    font-size: clamp(1rem, 2.5vw, 1.18rem);
+    line-height: 1.65;
+    margin: 1.4rem auto 2.6rem;
+    max-width: 560px;
+    animation: fadeInUp 0.9s 0.2s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeInUp 0.9s 0.3s ease both;
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    border-radius: 100px; font-size: 0.95rem; font-weight: 600;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+
+  .btn-primary { background: var(--rojo); color: var(--blanco); }
+  .btn-primary:hover { background: var(--rojo-oscuro); }
+  .btn-outline { background: transparent; color: var(--blanco); border: 2px solid rgba(255,255,255,0.4); }
+  .btn-outline:hover { border-color: var(--dorado); color: var(--dorado); }
+  .btn-gold { background: var(--dorado); color: var(--cafe); }
+  .btn-gold:hover { background: #b5842f; }
+
+  .hero-scroll {
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: rgba(255,255,255,0.4); font-size: 0.72rem; letter-spacing: 0.15em;
+    text-transform: uppercase; animation: bounce 2s infinite;
+  }
+  .hero-scroll::after {
+    content: ''; display: block; width: 1px; height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  }
+
+  /* ── SECTIONS COMMON ── */
+  section { padding: 100px 5%; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--rojo); margin-bottom: 0.6rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 900; line-height: 1.1;
+    color: var(--cafe);
+  }
+  .section-title em { color: var(--rojo); font-style: italic; }
+
+  /* ── APP BANNER ── */
+  .app-banner {
+    background: linear-gradient(135deg, var(--rojo) 0%, var(--rojo-oscuro) 100%);
+    color: var(--blanco);
+    display: flex; align-items: center;
+    justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap;
+    padding: 40px 5%;
+  }
+  .app-banner h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700; margin-bottom: 0.4rem;
+  }
+  .app-banner p { opacity: 0.85; font-size: 0.95rem; max-width: 500px; }
+  .app-badges { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1rem; }
+  .app-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 0.5rem 1.2rem; border-radius: 10px;
+    font-size: 0.85rem; font-weight: 500; color: var(--blanco);
+    cursor: pointer; transition: background 0.2s;
+  }
+  .app-badge:hover { background: rgba(255,255,255,0.25); }
+
+  /* ── PRODUCTS ── */
+  .products-section { background: var(--crema); }
+  .products-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;
+  }
+
+  .filter-bar {
+    display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2.5rem;
+  }
+  .filter-chip {
+    padding: 0.4rem 1.1rem; border-radius: 100px;
+    font-size: 0.82rem; font-weight: 500;
+    border: 1.5px solid rgba(59,26,14,0.25);
+    background: transparent; color: var(--cafe-medio);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .filter-chip:hover, .filter-chip.active {
+    background: var(--cafe); color: var(--blanco); border-color: var(--cafe);
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.6rem;
+  }
+
+  .product-card {
+    background: var(--blanco);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 2px 16px rgba(59,26,14,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+  .product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(59,26,14,0.15);
+  }
+
+  .product-img {
+    height: 200px;
+    background: linear-gradient(135deg, #f5e8d8 0%, #e8d5b7 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; position: relative; overflow: hidden;
+  }
+  .product-img::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(59,26,14,0.08));
+  }
+
+  .product-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--rojo); color: var(--blanco);
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 100px;
+  }
+
+  .product-info { padding: 1.2rem 1.4rem 1.4rem; }
+  .product-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700;
+    color: var(--cafe); margin-bottom: 0.3rem;
+  }
+  .product-desc {
+    font-size: 0.82rem; color: var(--cafe-medio);
+    line-height: 1.5; margin-bottom: 0.8rem;
+  }
+  .product-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .product-tag {
+    font-size: 0.7rem; font-weight: 600;
+    padding: 0.2rem 0.6rem; border-radius: 6px;
+    background: rgba(200,16,46,0.08); color: var(--rojo);
+  }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-price {
+    font-size: 1.1rem; font-weight: 700; color: var(--cafe);
+  }
+  .product-price s { font-size: 0.85rem; color: #aaa; font-weight: 400; margin-right: 0.3rem; }
+
+  .add-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--rojo); color: var(--blanco); border: none;
+    font-size: 1.2rem; cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .add-btn:hover { background: var(--rojo-oscuro); transform: scale(1.1); }
+
+  /* ── CART MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55); z-index: 2000;
+    align-items: flex-end; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--blanco);
+    border-radius: 24px 24px 0 0;
+    padding: 2rem 1.8rem;
+    width: 100%; max-width: 560px;
+    max-height: 90vh; overflow-y: auto;
+    animation: slideUp 0.35s ease;
+  }
+
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .modal-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 900; color: var(--cafe);
+  }
+  .modal-close {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--crema); border: none;
+    font-size: 1.1rem; cursor: pointer; color: var(--cafe);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .cart-items { margin-bottom: 1.5rem; }
+  .cart-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 0; border-bottom: 1px solid rgba(59,26,14,0.1);
+  }
+  .cart-item-icon { font-size: 2rem; }
+  .cart-item-info { flex: 1; }
+  .cart-item-info h4 { font-size: 0.95rem; font-weight: 600; color: var(--cafe); }
+  .cart-item-info p { font-size: 0.8rem; color: var(--cafe-medio); margin-top: 2px; }
+  .cart-item-price { font-weight: 700; color: var(--rojo); }
+
+  .cart-qty {
+    display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem;
+  }
+  .cart-qty button {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1.5px solid rgba(59,26,14,0.2);
+    background: transparent; cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; color: var(--cafe);
+  }
+  .cart-qty button:hover { background: var(--rojo); color: var(--blanco); border-color: var(--rojo); }
+  .cart-qty span { font-weight: 600; min-width: 20px; text-align: center; }
+
+  .cart-total {
+    background: var(--crema); border-radius: 14px;
+    padding: 1.2rem 1.4rem; margin-bottom: 1.2rem;
+  }
+  .cart-total-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; }
+  .cart-total-row.total { font-weight: 700; font-size: 1.05rem; color: var(--cafe); border-top: 1px solid rgba(59,26,14,0.15); padding-top: 0.6rem; margin-top: 0.4rem; }
+
+  .cart-empty { text-align: center; padding: 3rem 1rem; color: var(--cafe-medio); }
+  .cart-empty .cart-empty-icon { font-size: 3.5rem; margin-bottom: 0.8rem; }
+
+  /* ── STORES ── */
+  .stores-section { background: var(--cafe); color: var(--blanco); }
+  .stores-section .section-title { color: var(--blanco); }
+  .stores-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.4rem; margin-top: 3rem;
+  }
+  .store-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 1.4rem 1.6rem;
+    transition: background 0.25s, transform 0.25s;
+    cursor: pointer;
+  }
+  .store-card:hover { background: rgba(255,255,255,0.11); transform: translateY(-3px); }
+  .store-card h4 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .store-card p { font-size: 0.83rem; color: rgba(255,255,255,0.65); line-height: 1.55; }
+  .store-card .store-dist {
+    display: inline-block; margin-top: 0.8rem;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--dorado);
+  }
+
+  /* ── FAQ ── */
+  .faq-section { background: var(--crema); }
+  .faq-list { max-width: 760px; margin-top: 3rem; }
+  .faq-item { border-bottom: 1px solid rgba(59,26,14,0.15); }
+  .faq-q {
+    width: 100%; display: flex; align-items: center; justify-content: space-between;
+    padding: 1.3rem 0; background: transparent; border: none;
+    cursor: pointer; text-align: left;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600;
+    color: var(--cafe); gap: 1rem;
+  }
+  .faq-q .faq-icon {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(200,16,46,0.1); color: var(--rojo);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; transition: transform 0.3s, background 0.3s;
+  }
+  .faq-item.open .faq-q .faq-icon { transform: rotate(45deg); background: var(--rojo); color: var(--blanco); }
+
+  .faq-a {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    font-size: 0.93rem; color: var(--cafe-medio); line-height: 1.7;
+  }
+  .faq-item.open .faq-a { max-height: 300px; padding-bottom: 1.2rem; }
+
+  /* ── CONTACT ── */
+  .contact-section { background: linear-gradient(135deg, #1a0a05 0%, var(--cafe) 100%); color: var(--blanco); }
+  .contact-section .section-title { color: var(--blanco); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; margin-top: 3rem;
+  }
+  .contact-info h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+    margin-bottom: 1.2rem; color: var(--dorado);
+  }
+  .contact-item {
+    display: flex; align-items: flex-start; gap: 0.8rem;
+    margin-bottom: 1.1rem;
+  }
+  .contact-item-icon { font-size: 1.2rem; margin-top: 2px; }
+  .contact-item p { font-size: 0.9rem; color: rgba(255,255,255,0.75); line-height: 1.6; }
+  .contact-item strong { color: var(--blanco); display: block; margin-bottom: 0.15rem; }
+
+  .contact-form { }
+  .form-group { margin-bottom: 1.1rem; }
+  .form-group label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.4rem; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 12px; padding: 0.75rem 1rem;
+    color: var(--blanco); font-family: 'DM Sans', sans-serif; font-size: 0.93rem;
+    outline: none; transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.35); }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--rojo); }
+  .form-group textarea { height: 110px; resize: vertical; }
+  .form-group select option { background: var(--cafe); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0e0503; color: rgba(255,255,255,0.6);
+    padding: 3rem 5% 2rem;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2rem; margin-bottom: 2.5rem;
+  }
+  .footer-brand .nav-logo { font-size: 1.6rem; display: block; margin-bottom: 0.8rem; }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.65; max-width: 240px; }
+  .footer-col h5 {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blanco); margin-bottom: 1rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.55rem; }
+  .footer-col ul li a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--dorado); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem; flex-wrap: wrap; gap: 0.8rem;
+  }
+
+  /* ── CART FAB ── */
+  .cart-fab {
+    position: fixed; bottom: 28px; right: 28px; z-index: 900;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: var(--rojo); color: var(--blanco);
+    border: none; cursor: pointer; font-size: 1.35rem;
+    box-shadow: 0 6px 24px rgba(200,16,46,0.45);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cart-fab:hover { transform: scale(1.08); box-shadow: 0 10px 32px rgba(200,16,46,0.55); }
+  .cart-count {
+    position: absolute; top: 0; right: 0;
+    background: var(--dorado); color: var(--cafe);
+    width: 22px; height: 22px; border-radius: 50%;
+    font-size: 0.72rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    display: none;
+  }
+  .cart-count.visible { display: flex; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--cafe); color: var(--blanco);
+    padding: 0.75rem 1.8rem; border-radius: 100px;
+    font-size: 0.88rem; font-weight: 500;
+    opacity: 0; pointer-events: none;
+    transition: all 0.35s ease; z-index: 3000;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── MOBILE NAV DRAWER ── */
+  .mobile-nav {
+    display: none; position: fixed; inset: 0;
+    background: rgba(10,4,2,0.97); z-index: 1500;
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 2rem;
+    animation: fadeIn 0.3s ease;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 900; color: var(--blanco);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .mobile-nav a:hover { color: var(--rojo); }
+  .mobile-nav-close {
+    position: absolute; top: 20px; right: 24px;
+    background: none; border: none; color: var(--blanco);
+    font-size: 2rem; cursor: pointer;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: none; } }
+  @keyframes fadeInUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: none; } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: none; } }
+  @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-8px); } }
+
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 70px 5%; }
+    .products-header { flex-direction: column; align-items: flex-start; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .hero-btns { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Juan <span>Valdez</span></a>
+  <ul class="nav-links">
+    <li><a href="#productos">Café</a></li>
+    <li><a href="#tiendas">Tiendas</a></li>
+    <li><a href="#preguntas">FAQ</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="#contacto" class="nav-cta">Pedir ahora</a></li>
+  </ul>
+  <button class="hamburger" onclick="openMobileNav()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+  <a href="#productos" onclick="closeMobileNav()">Café</a>
+  <a href="#tiendas" onclick="closeMobileNav()">Tiendas</a>
+  <a href="#preguntas" onclick="closeMobileNav()">FAQ</a>
+  <a href="#contacto" onclick="closeMobileNav()">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">CAFÉ</div>
+  <div class="hero-content">
+    <div class="hero-badge">☕ El café de todo un país</div>
+    <h1>Bienvenidos a<br><em>Juan Valdez</em> Café</h1>
+    <p>Descubre la riqueza del café colombiano en cada sorbo. Haz tu pedido con anticipación, sáltate la fila y obtén promos con nuestra app.</p>
+    <div class="hero-btns">
+      <a href="#productos" class="btn btn-primary">Ver productos</a>
+      <a href="#tiendas" class="btn btn-outline">Encuentra tu tienda</a>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- APP BANNER -->
+<div class="app-banner reveal">
+  <div>
+    <h2>📱 Descarga la aplicación Juan Valdez</h2>
+    <p>¡Haz tu pedido con anticipación, sáltate la fila y obtén promos exclusivas con nuestra aplicación!</p>
+    <div class="app-badges">
+      <div class="app-badge">🍎 App Store</div>
+      <div class="app-badge">▶ Google Play</div>
+    </div>
+  </div>
+  <div style="font-size:6rem;">☕</div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="productos">
+  <div class="products-header reveal">
+    <div>
+      <p class="section-label">Nuestro catálogo</p>
+      <h2 class="section-title">Café Molido<br>y <em>en Grano</em></h2>
+    </div>
+    <a href="#contacto" class="btn btn-primary">Ver menú completo</a>
+  </div>
+
+  <div class="filter-bar reveal">
+    <button class="filter-chip active" onclick="filterProducts('all', this)">Todos</button>
+    <button class="filter-chip" onclick="filterProducts('origen', this)">Origen</button>
+    <button class="filter-chip" onclick="filterProducts('premium', this)">Premium</button>
+    <button class="filter-chip" onclick="filterProducts('sostenible', this)">Sostenible</button>
+    <button class="filter-chip" onclick="filterProducts('fuerte', this)">Fuerte</button>
+    <button class="filter-chip" onclick="filterProducts('suave', this)">Suave</button>
+  </div>
+
+  <div class="products-grid" id="productsGrid">
+    <!-- cards injected by JS -->
+  </div>
+</section>
+
+<!-- STORES -->
+<section class="stores-section" id="tiendas">
+  <div class="reveal">
+    <p class="section-label" style="color:var(--dorado)">Cerca de ti</p>
+    <h2 class="section-title">Encuentra tu<br><em style="color:var(--rojo)">Juan Valdez</em></h2>
+  </div>
+  <div class="stores-grid reveal">
+    <div class="store-card">
+      <h4>Plaza de las Américas</h4>
+      <p>Cra. 71d #6-94 SUR 1214, Bogotá</p>
+      <span class="store-dist">📍 Bogotá</span>
+    </div>
+    <div class="store-card">
+      <h4>Éxito Tunal</h4>
+      <p>Cl. 47b Sur #24B - 33 Lc 103A, Bogotá</p>
+      <span class="store-dist">📍 Bogotá</span>
+    </div>
+    <div class="store-card">
+      <h4>Centro Mayor</h4>
+      <p>CC Centro Mayor, Cl. 38A Sur #34D-50 Local 3027 (Tercer Piso), Antonio Nariño</p>
+      <span class="store-dist">📍 Bogotá</span>
+    </div>
+    <div class="store-card">
+      <h4>City U</h4>
+      <p>Viviendas Universitarias, Cl. 19 #2A-10 Local 109, Santa Fé, Bogotá</p>
+      <span class="store-dist">📍 Bogotá</span>
+    </div>
+    <div class="store-card">
+      <h4>El Retiro</h4>
+      <p>Calle 81 #11-94, Local 134, Chapinero, Bogotá</p>
+      <span class="store-dist">📍 Bogotá</span>
+    </div>
+    <div class="store-card">
+      <h4>Gran Estación</h4>
+      <p>Av. Cra. 60 #20-16, Local 1-123, Bogotá</p>
+      <span class="store-dist">📍 Bogotá</span>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="preguntas">
+  <div class="reveal">
+    <p class="section-label">Resolvemos tus dudas</p>
+    <h2 class="section-title">Preguntas<br><em>Frecuentes</em></h2>
+  </div>
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Cuál es la diferencia entre el café molido y el café en grano?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">El café en grano conserva sus aromas y sabores por más tiempo, ya que la oxidación comienza al moler. El café molido es más conveniente si no tienes molinillo. Recomendamos comprar en grano y moler justo antes de preparar para una experiencia óptima.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Qué tipo de café debo elegir según mi método de preparación?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Para prensa francesa usa molienda gruesa; para espresso, molienda fina; para goteo o drip, molienda media. En Juan Valdez encontrarás cada producto etiquetado con el método ideal para orientar tu elección.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Cuál es el mejor café molido para cafetera eléctrica?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Para cafetera eléctrica de goteo recomendamos una molienda media-fina. El Café Origen Sierra Nevada y el Café Premium Volcán son excelentes opciones por su perfil equilibrado que se expresa perfecto en este método.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Cómo conservar el café en grano para mantener su frescura?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Guarda el café en un recipiente hermético, en un lugar fresco, oscuro y seco. Evita el refrigerador o congelador, ya que la humedad y los olores deterioran el sabor. Lo ideal es consumirlo dentro de los 30 días de apertura del empaque.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Tienen envío a domicilio?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Sí, puedes realizar tu pedido a través de nuestra tienda en línea o la aplicación Juan Valdez. Los impuestos y costos de envío se calculan al finalizar la compra según tu ubicación.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contacto">
+  <div class="reveal">
+    <p class="section-label" style="color:var(--dorado)">Estamos para ti</p>
+    <h2 class="section-title">Contáctanos</h2>
+  </div>
+  <div class="contact-grid reveal">
+    <div class="contact-info">
+      <h3>Información de contacto</h3>
+      <div class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <p><strong>Teléfonos</strong>(601) 482 41 51<br>01 8000 517711 (línea gratuita)</p>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">🕐</div>
+        <p><strong>Horarios de atención</strong>Lunes a sábado: 8am – 8pm<br>Domingos y festivos: 8am – 6pm</p>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">✉️</div>
+        <p><strong>Correo electrónico</strong>cuentaconjuan@juanvaldezcafe.com</p>
+      </div>
+      <div style="margin-top:2rem;">
+        <a href="#productos" class="btn btn-gold">Ver productos ☕</a>
+      </div>
+    </div>
+
+    <form class="contact-form" onsubmit="submitForm(event)">
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" placeholder="Tu nombre" required>
+      </div>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" placeholder="tu@correo.com" required>
+      </div>
+      <div class="form-group">
+        <label>Asunto</label>
+        <select>
+          <option>Consulta sobre producto</option>
+          <option>Pedido en línea</option>
+          <option>Ubicación de tienda</option>
+          <option>Aplicación móvil</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Mensaje</label>
+        <textarea placeholder="¿En qué podemos ayudarte?"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Enviar mensaje →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">Juan <span>Valdez</span></a>
+      <p>El café de todo un país. Cafés colombianos de origen con los más altos estándares de calidad.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Café empacado</h5>
+      <ul>
+        <li><a href="#">Molido / Grano</a></li>
+        <li><a href="#">Café Liofilizado</a></li>
+        <li><a href="#">Consumo Individual</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Artículos</h5>
+      <ul>
+        <li><a href="#">Termos</a></li>
+        <li><a href="#">Mugs y Vajillas</a></li>
+        <li><a href="#">Accesorios</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Acerca de</h5>
+      <ul>
+        <li><a href="#">Nuestra historia</a></li>
+        <li><a href="#">Contáctenos</a></li>
+        <li><a href="#">Términos y Condiciones</a></li>
+        <li><a href="#">Política de datos</a></li>
+        <li><a href="#">Promociones</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>@2026 Juan Valdez. Todos los derechos reservados.</span>
+    <span>Hecho con ☕ en Colombia</span>
+  </div>
+</footer>
+
+<!-- CART FAB -->
+<button class="cart-fab" onclick="openCart()" aria-label="Ver carrito">
+  🛒
+  <span class="cart-count" id="cartCount">0</span>
+</button>
+
+<!-- CART MODAL -->
+<div class="modal-overlay" id="cartModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🛒 Tu carrito</h3>
+      <button class="modal-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div id="cartSummary"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:0.5rem;" onclick="checkout()">Finalizar compra →</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──
+const products = [
+  { id:1, name:'Café Premium Volcán 454gr', desc:'Fuerte, notas de dulce caramelo y cacao. Disponible en grano o molido.', price:49900, badge:'Nuevo', tags:['Fuerte','Premium'], emoji:'🌋', cat:['premium','fuerte'] },
+  { id:2, name:'Café Origen Sierra Nevada 454gr', desc:'Balanceado, perfil suave con notas florales y cítricas únicas del macizo.', price:50925, oldPrice:67900, badge:'Origen', tags:['Balanceado','Origen'], emoji:'⛰️', cat:['origen'] },
+  { id:3, name:'Café Origen Huila 454gr', desc:'Dulce y afrutado, con acidez brillante característica del sur del país.', price:50925, oldPrice:67900, badge:'Origen', tags:['Suave','Origen'], emoji:'☕', cat:['origen','suave'] },
+  { id:4, name:'Café Origen Nariño 454gr', desc:'Acidez pronunciada y cuerpo dulce, perfil gourmet de alta montaña.', price:50925, oldPrice:67900, badge:'Origen', tags:['Balanceado','Origen'], emoji:'🏔️', cat:['origen'] },
+  { id:5, name:'Línea Premium Selection', desc:'Seleccionados con los más altos estándares de calidad y atributos únicos.', price:67900, badge:'Premium', tags:['Premium','Fuerte'], emoji:'⭐', cat:['premium','fuerte'] },
+  { id:6, name:'Café Línea Sostenible 340gr', desc:'Cultivado con prácticas responsables. Certificación de sostenibilidad ambiental.', price:44900, badge:'Eco', tags:['Sostenible','Suave'], emoji:'🌿', cat:['sostenible','suave'] },
+];
+
+let cart = [];
+let currentFilter = 'all';
+
+// ── RENDER PRODUCTS ──
+function renderProducts(filter='all') {
+  const grid = document.getElementById('productsGrid');
+  const filtered = filter==='all' ? products : products.filter(p => p.cat.includes(filter));
+  grid.innerHTML = filtered.map(p => `
+    <div class="product-card" data-id="${p.id}">
+      <div class="product-img">
+        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
+        <span>${p.emoji}</span>
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-tags">${p.tags.map(t=>`<span class="product-tag">${t}</span>`).join('')}</div>
+        <div class="product-footer">
+          <div class="product-price">
+            ${p.oldPrice ? `<s>$${p.oldPrice.toLocaleString()}</s>` : ''}
+            $${p.price.toLocaleString()}
+          </div>
+          <button class="add-btn" onclick="addToCart(${p.id})" aria-label="Agregar al carrito">+</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterProducts(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(cat);
+}
+
+// ── CART ──
+function addToCart(id) {
+  const p = products.find(x=>x.id===id);
+  const existing = cart.find(x=>x.id===id);
+  if (existing) existing.qty++;
+  else cart.push({...p, qty:1});
+  updateCartBadge();
+  showToast(`☕ ${p.name.split(' ').slice(0,3).join(' ')} agregado`);
+}
+
+function updateCartBadge() {
+  const total = cart.reduce((s,i)=>s+i.qty,0);
+  const el = document.getElementById('cartCount');
+  el.textContent = total;
+  el.classList.toggle('visible', total>0);
+}
+
+function renderCart() {
+  const el = document.getElementById('cartItems');
+  const sum = document.getElementById('cartSummary');
+  if (!cart.length) {
+    el.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Tu carrito está vacío.<br>¡Agrega tu café favorito!</p></div>`;
+    sum.innerHTML = '';
+    return;
+  }
+  el.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-icon">${item.emoji}</div>
+      <div class="cart-item-info">
+        <h4>${item.name}</h4>
+        <div class="cart-qty">
+          <button onclick="changeQty(${item.id},-1)">−</button>
+          <span>${item.qty}</span>
+          <button onclick="changeQty(${item.id},1)">+</button>
+        </div>
+      </div>
+      <div class="cart-item-price">$${(item.price*item.qty).toLocaleString()}</div>
+    </div>
+  `).join('');
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  sum.innerHTML = `
+    <div class="cart-total">
+      <div class="cart-total-row"><span>Subtotal</span><span>$${subtotal.toLocaleString()}</span></div>
+      <div class="cart-total-row"><span>Envío</span><span>Se calcula al finalizar</span></div>
+      <div class="cart-total-row total"><span>Total</span><span>$${subtotal.toLocaleString()}</span></div>
+    </div>
+  `;
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(x=>x.id===id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(x=>x.id!==id);
+  updateCartBadge();
+  renderCart();
+}
+
+function openCart() { document.getElementById('cartModal').classList.add('open'); renderCart(); }
+function closeCart() { document.getElementById('cartModal').classList.remove('open'); }
+
+function checkout() {
+  if (!cart.length) return;
+  cart = [];
+  updateCartBadge();
+  closeCart();
+  showToast('✅ ¡Pedido realizado con éxito!');
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+// ── FAQ ──
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  item.classList.toggle('open');
+}
+
+// ── FORM ──
+function submitForm(e) {
+  e.preventDefault();
+  showToast('✅ Mensaje enviado. ¡Te contactaremos pronto!');
+  e.target.reset();
+}
+
+// ── MOBILE NAV ──
+function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Close modal on overlay click
+document.getElementById('cartModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('cartModal')) closeCart();
+});
+
+// Init
+renderProducts();
+</script>
+</body>
+</html>
