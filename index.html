@@ -3,992 +3,1256 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Juan Valdez Café – El café de todo un país</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Juan Valdez | Experiencia App</title>
 <style>
   :root {
-    --rojo: #C8102E;
-    --rojo-oscuro: #9B0E24;
-    --cafe: #3B1A0E;
-    --cafe-medio: #6B3A2A;
-    --dorado: #C9973A;
-    --crema: #F9F3EC;
-    --blanco: #FFFFFF;
-    --verde: #2D5016;
+    --red: #D70021;
+    --green: #295F2F;
+    --olive: #BAB93D;
+    --yellow: #F8C231;
+    --white: #FFFFFF;
+    --red-08: rgba(215, 0, 33, .08);
+    --red-16: rgba(215, 0, 33, .16);
+    --green-08: rgba(41, 95, 47, .08);
+    --green-14: rgba(41, 95, 47, .14);
+    --green-72: rgba(41, 95, 47, .72);
+    --green-88: rgba(41, 95, 47, .88);
+    --white-18: rgba(255, 255, 255, .18);
+    --white-74: rgba(255, 255, 255, .74);
+    --white-92: rgba(255, 255, 255, .92);
+    --shadow: 0 24px 70px rgba(41, 95, 47, .18);
+    --radius: 8px;
+    --nav: 76px;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+  * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-
   body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--crema);
-    color: var(--cafe);
+    margin: 0;
+    font-family: "Proxima Nova", "Montserrat", Arial, sans-serif;
+    color: var(--green);
+    background: var(--white);
     overflow-x: hidden;
   }
+  body.locked { overflow: hidden; }
+  img { max-width: 100%; display: block; }
+  button, input, select { font: inherit; }
+  button { cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-    background: rgba(59,26,14,0.96);
-    backdrop-filter: blur(12px);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 5%;
-    height: 68px;
-    border-bottom: 2px solid var(--rojo);
+  .site-shell { background: var(--white); }
+  .topbar {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 30;
+    height: var(--nav);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 24px;
+    padding: 0 clamp(16px, 4vw, 64px);
+    background: var(--white-92);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--green-14);
   }
-
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem; font-weight: 900;
-    color: var(--blanco); letter-spacing: 0.04em;
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--rojo); }
-
-  .nav-links {
-    display: flex; gap: 2rem; list-style: none;
-  }
-  .nav-links a {
-    color: rgba(255,255,255,0.82);
-    text-decoration: none;
-    font-size: 0.88rem; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--dorado); }
-
-  .nav-cta {
-    background: var(--rojo);
-    color: var(--blanco) !important;
-    padding: 0.45rem 1.2rem;
-    border-radius: 100px;
-    transition: background 0.2s !important;
-  }
-  .nav-cta:hover { background: var(--rojo-oscuro) !important; color: var(--blanco) !important; }
-
-  .hamburger {
-    display: none;
-    flex-direction: column; gap: 5px;
-    cursor: pointer; padding: 4px;
-  }
-  .hamburger span {
-    display: block; width: 25px; height: 2px;
-    background: var(--blanco);
-    transition: all 0.3s;
-  }
-
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    background: linear-gradient(135deg, var(--cafe) 0%, #1a0a05 60%, #3B1A0E 100%);
-    display: flex; align-items: center; justify-content: center;
-    text-align: center;
-    position: relative; overflow: hidden;
-    padding: 100px 5% 60px;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(200,16,46,0.18) 0%, transparent 70%);
-  }
-
-  .hero-bg-text {
-    position: absolute;
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(8rem, 20vw, 22rem);
-    font-weight: 900; color: rgba(255,255,255,0.03);
-    letter-spacing: -0.05em;
-    user-select: none; pointer-events: none;
-    top: 50%; transform: translateY(-50%);
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+    letter-spacing: .01em;
+    color: var(--red);
     white-space: nowrap;
   }
-
-  .hero-content { position: relative; z-index: 2; max-width: 760px; }
-
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: rgba(200,16,46,0.25);
-    border: 1px solid rgba(200,16,46,0.5);
-    color: #ff8fa0; font-size: 0.78rem; letter-spacing: 0.12em;
-    text-transform: uppercase; padding: 0.35rem 1rem;
-    border-radius: 100px; margin-bottom: 1.8rem;
-    animation: fadeInDown 0.8s ease both;
+  .brand-mark {
+    width: 40px;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    color: var(--white);
+    background: var(--red);
+    border-radius: 50%;
+    box-shadow: 0 10px 24px var(--red-16);
   }
-
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.8rem, 7vw, 5.5rem);
-    font-weight: 900; color: var(--blanco);
-    line-height: 1.05;
-    animation: fadeInUp 0.9s 0.1s ease both;
+  .brand-mark svg { width: 27px; height: 27px; }
+  .navlinks {
+    display: flex;
+    justify-content: center;
+    gap: clamp(14px, 2vw, 32px);
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: .07em;
+    text-transform: uppercase;
   }
-  .hero h1 em { color: var(--rojo); font-style: italic; }
-
-  .hero p {
-    color: rgba(255,255,255,0.7);
-    font-size: clamp(1rem, 2.5vw, 1.18rem);
-    line-height: 1.65;
-    margin: 1.4rem auto 2.6rem;
-    max-width: 560px;
-    animation: fadeInUp 0.9s 0.2s ease both;
+  .navlinks a { color: var(--green); }
+  .navlinks a:hover { color: var(--red); }
+  .nav-actions { display: flex; align-items: center; gap: 10px; }
+  .icon-btn, .menu-toggle {
+    width: 44px;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--green-14);
+    color: var(--green);
+    background: var(--white);
+    border-radius: 50%;
+    transition: transform .2s ease, border-color .2s ease, color .2s ease;
   }
+  .icon-btn:hover, .menu-toggle:hover { transform: translateY(-2px); border-color: var(--red); color: var(--red); }
+  .menu-toggle { display: none; }
+  .cart-dot {
+    position: absolute;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    display: none;
+    place-items: center;
+    margin: -30px 0 0 30px;
+    color: var(--green);
+    background: var(--yellow);
+    border-radius: 999px;
+    font-size: .68rem;
+    font-weight: 900;
+  }
+  .cart-dot.show { display: grid; }
 
-  .hero-btns {
-    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-    animation: fadeInUp 0.9s 0.3s ease both;
+  .mobile-panel {
+    position: fixed;
+    inset: var(--nav) 0 auto;
+    z-index: 29;
+    display: none;
+    padding: 18px;
+    background: var(--white);
+    border-bottom: 1px solid var(--green-14);
+    box-shadow: var(--shadow);
+  }
+  .mobile-panel.open { display: grid; gap: 10px; }
+  .mobile-panel a {
+    padding: 14px 12px;
+    border-radius: var(--radius);
+    background: var(--green-08);
+    font-weight: 900;
   }
 
   .btn {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    padding: 0.85rem 2rem;
-    border-radius: 100px; font-size: 0.95rem; font-weight: 600;
-    text-decoration: none; cursor: pointer; border: none;
-    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 46px;
+    padding: 0 20px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-weight: 900;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
   }
-  .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px var(--green-14); }
+  .btn-primary { color: var(--white); background: var(--red); }
+  .btn-green { color: var(--white); background: var(--green); }
+  .btn-yellow { color: var(--green); background: var(--yellow); }
+  .btn-ghost { color: var(--green); background: var(--white); border-color: var(--green-14); }
+  .btn svg, .icon-btn svg, .menu-toggle svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
-  .btn-primary { background: var(--rojo); color: var(--blanco); }
-  .btn-primary:hover { background: var(--rojo-oscuro); }
-  .btn-outline { background: transparent; color: var(--blanco); border: 2px solid rgba(255,255,255,0.4); }
-  .btn-outline:hover { border-color: var(--dorado); color: var(--dorado); }
-  .btn-gold { background: var(--dorado); color: var(--cafe); }
-  .btn-gold:hover { background: #b5842f; }
-
-  .hero-scroll {
-    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-    color: rgba(255,255,255,0.4); font-size: 0.72rem; letter-spacing: 0.15em;
-    text-transform: uppercase; animation: bounce 2s infinite;
+  .harvest-stage {
+    height: 285vh;
+    position: relative;
+    background: var(--green);
   }
-  .hero-scroll::after {
-    content: ''; display: block; width: 1px; height: 40px;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
-  }
-
-  /* ── SECTIONS COMMON ── */
-  section { padding: 100px 5%; }
-  .section-label {
-    font-size: 0.75rem; font-weight: 600;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--rojo); margin-bottom: 0.6rem;
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3.4rem);
-    font-weight: 900; line-height: 1.1;
-    color: var(--cafe);
-  }
-  .section-title em { color: var(--rojo); font-style: italic; }
-
-  /* ── APP BANNER ── */
-  .app-banner {
-    background: linear-gradient(135deg, var(--rojo) 0%, var(--rojo-oscuro) 100%);
-    color: var(--blanco);
-    display: flex; align-items: center;
-    justify-content: space-between;
-    gap: 2rem; flex-wrap: wrap;
-    padding: 40px 5%;
-  }
-  .app-banner h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 700; margin-bottom: 0.4rem;
-  }
-  .app-banner p { opacity: 0.85; font-size: 0.95rem; max-width: 500px; }
-  .app-badges { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1rem; }
-  .app-badge {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
-    padding: 0.5rem 1.2rem; border-radius: 10px;
-    font-size: 0.85rem; font-weight: 500; color: var(--blanco);
-    cursor: pointer; transition: background 0.2s;
-  }
-  .app-badge:hover { background: rgba(255,255,255,0.25); }
-
-  /* ── PRODUCTS ── */
-  .products-section { background: var(--crema); }
-  .products-header {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;
-  }
-
-  .filter-bar {
-    display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2.5rem;
-  }
-  .filter-chip {
-    padding: 0.4rem 1.1rem; border-radius: 100px;
-    font-size: 0.82rem; font-weight: 500;
-    border: 1.5px solid rgba(59,26,14,0.25);
-    background: transparent; color: var(--cafe-medio);
-    cursor: pointer; transition: all 0.2s;
-  }
-  .filter-chip:hover, .filter-chip.active {
-    background: var(--cafe); color: var(--blanco); border-color: var(--cafe);
-  }
-
-  .products-grid {
+  .harvest-sticky {
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    overflow: hidden;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1.6rem;
+    place-items: center;
+    isolation: isolate;
+  }
+  .harvest-photo {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(180deg, var(--green-72), rgba(41,95,47,.18) 40%, var(--green-88)), url("assets/manual-p12-1.jpg");
+    background-size: cover;
+    background-position: center;
+    transform: scale(calc(1.08 - var(--intro-progress, 0) * .05));
+    transition: transform .08s linear;
+    z-index: -3;
+  }
+  .leaf-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: .28;
+    z-index: -2;
+    background:
+      radial-gradient(ellipse at 12% 18%, var(--olive) 0 2px, transparent 3px),
+      radial-gradient(ellipse at 74% 38%, var(--yellow) 0 2px, transparent 3px),
+      linear-gradient(115deg, transparent 0 47%, var(--white-18) 48% 49%, transparent 50% 100%);
+    background-size: 94px 94px, 130px 130px, 150px 150px;
+  }
+  .intro-copy {
+    width: min(1040px, calc(100% - 32px));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 390px);
+    align-items: end;
+    gap: clamp(28px, 6vw, 84px);
+    padding-top: var(--nav);
+    color: var(--white);
+  }
+  .intro-kicker {
+    display: inline-flex;
+    width: fit-content;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    color: var(--green);
+    background: var(--yellow);
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .intro-copy h1 {
+    max-width: 760px;
+    margin: 0;
+    font-size: clamp(3.1rem, 8vw, 7rem);
+    line-height: .9;
+    letter-spacing: 0;
+  }
+  .intro-copy p {
+    max-width: 560px;
+    margin: 24px 0 0;
+    color: var(--white-92);
+    font-size: clamp(1rem, 2.1vw, 1.22rem);
+    line-height: 1.55;
+  }
+  .basket-panel {
+    position: relative;
+    min-height: 420px;
+    display: grid;
+    align-content: end;
+    justify-items: center;
+  }
+  .basket {
+    width: min(330px, 72vw);
+    aspect-ratio: 1.35;
+    position: relative;
+    border: 7px solid var(--yellow);
+    border-top-width: 15px;
+    border-radius: 0 0 42% 42%;
+    background:
+      repeating-linear-gradient(90deg, var(--olive) 0 8px, var(--yellow) 8px 16px),
+      var(--yellow);
+    box-shadow: inset 0 20px 0 var(--white-18), 0 28px 56px rgba(41,95,47,.34);
+    transform: translateY(calc((1 - var(--intro-progress, 0)) * 70px));
+  }
+  .basket::before {
+    content: "";
+    position: absolute;
+    inset: -70px 18% auto;
+    height: 90px;
+    border: 9px solid var(--yellow);
+    border-bottom: 0;
+    border-radius: 90px 90px 0 0;
+  }
+  .basket::after {
+    content: "";
+    position: absolute;
+    inset: 22% 12% 18%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 20% 30%, var(--red) 0 8px, transparent 9px),
+      radial-gradient(circle at 52% 54%, var(--red) 0 9px, transparent 10px),
+      radial-gradient(circle at 72% 35%, var(--red) 0 8px, transparent 9px),
+      radial-gradient(circle at 38% 70%, var(--red) 0 9px, transparent 10px),
+      radial-gradient(circle at 84% 70%, var(--olive) 0 8px, transparent 9px);
+    opacity: calc(var(--intro-progress, 0) * 1.2);
+  }
+  .falling-beans {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .bean {
+    position: absolute;
+    top: calc(var(--start-y) * 1%);
+    left: calc(var(--x) * 1%);
+    width: clamp(16px, 2.5vw, 29px);
+    aspect-ratio: 1;
+    background:
+      radial-gradient(circle at 32% 32%, var(--white-74) 0 10%, transparent 11%),
+      var(--red);
+    border-radius: 50%;
+    box-shadow: inset -5px -6px 0 rgba(41,95,47,.18), 0 10px 24px rgba(41,95,47,.26);
+    transform:
+      translate(
+        calc((var(--target-x) - var(--x)) * 1vw * var(--intro-progress, 0)),
+        calc((var(--target-y) - var(--start-y)) * 1vh * var(--intro-progress, 0))
+      )
+      rotate(calc(var(--intro-progress, 0) * var(--spin) * 1deg))
+      scale(calc(.74 + var(--intro-progress, 0) * .42));
+    opacity: calc(.28 + var(--intro-progress, 0) * .72);
+  }
+  .bean::after {
+    content: "";
+    position: absolute;
+    inset: 18% 45%;
+    border-radius: 999px;
+    background: var(--yellow);
+    transform: rotate(24deg);
+  }
+  .scroll-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    color: var(--white);
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .scroll-cue span {
+    width: 2px;
+    height: 42px;
+    background: linear-gradient(var(--yellow), transparent);
+    animation: cue 1.8s infinite;
+  }
+  .enter-chip {
+    margin-top: 18px;
+    color: var(--green);
+    background: var(--white);
+    transform: translateY(calc((1 - var(--intro-progress, 0)) * 16px));
+    opacity: calc(var(--intro-progress, 0) * 1.4 - .18);
   }
 
+  .app-hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(310px, .95fr);
+    align-items: center;
+    gap: clamp(32px, 6vw, 88px);
+    padding: calc(var(--nav) + 50px) clamp(18px, 5vw, 76px) 64px;
+    background:
+      linear-gradient(120deg, var(--white) 0 55%, var(--green-08) 55% 100%);
+  }
+  .eyebrow {
+    margin: 0 0 12px;
+    color: var(--red);
+    font-size: .8rem;
+    font-weight: 900;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+  }
+  .display {
+    margin: 0;
+    color: var(--green);
+    font-size: clamp(2.5rem, 6vw, 5.4rem);
+    line-height: .96;
+    letter-spacing: 0;
+  }
+  .lead {
+    max-width: 640px;
+    margin: 22px 0 0;
+    font-size: clamp(1rem, 2vw, 1.18rem);
+    line-height: 1.7;
+    color: var(--green-72);
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .quick-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 34px;
+    max-width: 650px;
+  }
+  .stat {
+    padding: 18px;
+    border: 1px solid var(--green-14);
+    border-radius: var(--radius);
+    background: var(--white);
+  }
+  .stat strong { display: block; color: var(--red); font-size: clamp(1.4rem, 3vw, 2.2rem); line-height: 1; }
+  .stat span { display: block; margin-top: 8px; font-size: .82rem; font-weight: 800; color: var(--green); }
+
+  .phone-wrap {
+    display: grid;
+    justify-items: center;
+    perspective: 1300px;
+  }
+  .phone {
+    width: min(390px, 92vw);
+    min-height: 650px;
+    padding: 14px;
+    border-radius: 34px;
+    background: var(--green);
+    box-shadow: 0 34px 90px rgba(41,95,47,.32);
+    transform: rotateY(-7deg) rotateX(2deg);
+    animation: floatPhone 6s ease-in-out infinite;
+  }
+  .phone-screen {
+    min-height: 622px;
+    overflow: hidden;
+    border-radius: 25px;
+    background: var(--white);
+  }
+  .phone-top {
+    padding: 22px;
+    color: var(--white);
+    background:
+      linear-gradient(var(--green-72), var(--green-72)),
+      url("assets/manual-p12-2.jpg") center/cover;
+  }
+  .phone-top-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .avatar {
+    width: 42px;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    color: var(--green);
+    background: var(--yellow);
+    border-radius: 50%;
+    font-weight: 900;
+  }
+  .points-card {
+    margin-top: 22px;
+    padding: 18px;
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--green);
+    box-shadow: 0 16px 40px rgba(41,95,47,.26);
+  }
+  .points-card small { display: block; color: var(--red); font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+  .points-card strong { display: block; margin-top: 6px; font-size: 2.15rem; line-height: 1; }
+  .progress {
+    height: 9px;
+    margin-top: 14px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--green-14);
+  }
+  .progress span { display: block; width: 68%; height: 100%; background: var(--red); border-radius: inherit; }
+  .phone-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 14px;
+    background: var(--green-08);
+  }
+  .phone-tabs button {
+    min-height: 42px;
+    border: 0;
+    border-radius: 999px;
+    color: var(--green);
+    background: var(--white);
+    font-weight: 900;
+  }
+  .phone-tabs button.active { color: var(--white); background: var(--red); }
+  .phone-body { padding: 18px; }
+  .app-pane { display: none; animation: fadeUp .35s ease both; }
+  .app-pane.active { display: block; }
+  .login-box { display: grid; gap: 10px; }
+  .field {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid var(--green-14);
+    border-radius: var(--radius);
+    padding: 0 14px;
+    color: var(--green);
+    background: var(--white);
+    outline: 0;
+  }
+  .field:focus { border-color: var(--red); box-shadow: 0 0 0 4px var(--red-08); }
+  .small-note { margin: 10px 0 0; color: var(--green-72); font-size: .82rem; line-height: 1.45; }
+
+  section.content-section { padding: 86px clamp(18px, 5vw, 76px); }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  .section-head h2 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3.7rem);
+    line-height: 1;
+    letter-spacing: 0;
+  }
+  .section-head p { max-width: 520px; margin: 12px 0 0; color: var(--green-72); line-height: 1.6; }
+
+  .menu-section { background: var(--green-08); }
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .filter {
+    min-height: 40px;
+    border: 1px solid var(--green-14);
+    border-radius: 999px;
+    color: var(--green);
+    background: var(--white);
+    padding: 0 14px;
+    font-weight: 900;
+  }
+  .filter.active { color: var(--white); background: var(--green); border-color: var(--green); }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 22px;
+  }
   .product-card {
-    background: var(--blanco);
-    border-radius: 20px; overflow: hidden;
-    box-shadow: 0 2px 16px rgba(59,26,14,0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
+    display: grid;
+    grid-template-rows: 190px 1fr;
+    overflow: hidden;
+    min-height: 420px;
+    border-radius: var(--radius);
+    background: var(--white);
+    border: 1px solid var(--green-14);
+    box-shadow: 0 14px 40px rgba(41,95,47,.08);
+    transition: transform .25s ease, box-shadow .25s ease;
   }
-  .product-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 40px rgba(59,26,14,0.15);
+  .product-card:hover { transform: translateY(-7px); box-shadow: var(--shadow); }
+  .product-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    background: var(--green);
+    color: var(--white);
+    overflow: hidden;
   }
-
-  .product-img {
-    height: 200px;
-    background: linear-gradient(135deg, #f5e8d8 0%, #e8d5b7 100%);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 4rem; position: relative; overflow: hidden;
+  .product-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: .9;
   }
-  .product-img::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(to bottom, transparent 60%, rgba(59,26,14,0.08));
+  .cup-illustration {
+    width: 104px;
+    height: 112px;
+    color: var(--white);
   }
-
   .product-badge {
-    position: absolute; top: 12px; left: 12px;
-    background: var(--rojo); color: var(--blanco);
-    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 100px;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 7px 10px;
+    color: var(--green);
+    background: var(--yellow);
+    border-radius: 999px;
+    font-size: .68rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
   }
+  .product-info { padding: 18px; display: grid; align-content: space-between; gap: 16px; }
+  .product-info h3 { margin: 0; font-size: 1.1rem; line-height: 1.22; }
+  .product-info p { margin: 8px 0 0; color: var(--green-72); line-height: 1.55; font-size: .92rem; }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .price { color: var(--red); font-weight: 900; font-size: 1.1rem; white-space: nowrap; }
+  .add {
+    width: 42px;
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: 50%;
+    color: var(--white);
+    background: var(--red);
+    display: grid;
+    place-items: center;
+  }
+  .add svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2.4; fill: none; }
 
-  .product-info { padding: 1.2rem 1.4rem 1.4rem; }
-  .product-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.05rem; font-weight: 700;
-    color: var(--cafe); margin-bottom: 0.3rem;
+  .story-section {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
   }
-  .product-desc {
-    font-size: 0.82rem; color: var(--cafe-medio);
-    line-height: 1.5; margin-bottom: 0.8rem;
+  .story-media {
+    min-height: 520px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--green);
+    box-shadow: var(--shadow);
   }
-  .product-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
-  .product-tag {
-    font-size: 0.7rem; font-weight: 600;
-    padding: 0.2rem 0.6rem; border-radius: 6px;
-    background: rgba(200,16,46,0.08); color: var(--rojo);
+  .story-media img { width: 100%; height: 100%; object-fit: cover; }
+  .story-list { display: grid; gap: 14px; margin-top: 28px; }
+  .story-item {
+    display: grid;
+    grid-template-columns: 46px 1fr;
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid var(--green-14);
+    border-radius: var(--radius);
+    background: var(--white);
   }
-  .product-footer { display: flex; align-items: center; justify-content: space-between; }
-  .product-price {
-    font-size: 1.1rem; font-weight: 700; color: var(--cafe);
+  .story-icon {
+    width: 46px;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--green);
+    background: var(--yellow);
   }
-  .product-price s { font-size: 0.85rem; color: #aaa; font-weight: 400; margin-right: 0.3rem; }
+  .story-item h3 { margin: 0; font-size: 1rem; }
+  .story-item p { margin: 5px 0 0; color: var(--green-72); line-height: 1.55; }
 
-  .add-btn {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: var(--rojo); color: var(--blanco); border: none;
-    font-size: 1.2rem; cursor: pointer; display: flex;
-    align-items: center; justify-content: center;
-    transition: background 0.2s, transform 0.15s;
+  .stores-section { background: var(--green); color: var(--white); }
+  .stores-section .eyebrow { color: var(--yellow); }
+  .stores-section .section-head p { color: var(--white-74); }
+  .stores-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 360px) 1fr;
+    gap: 18px;
+    align-items: start;
   }
-  .add-btn:hover { background: var(--rojo-oscuro); transform: scale(1.1); }
-
-  /* ── CART MODAL ── */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.55); z-index: 2000;
-    align-items: flex-end; justify-content: center;
+  .store-tools {
+    position: sticky;
+    top: calc(var(--nav) + 18px);
+    display: grid;
+    gap: 12px;
+    padding: 18px;
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--green);
   }
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--blanco);
-    border-radius: 24px 24px 0 0;
-    padding: 2rem 1.8rem;
-    width: 100%; max-width: 560px;
-    max-height: 90vh; overflow-y: auto;
-    animation: slideUp 0.35s ease;
-  }
-
-  .modal-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 1.5rem;
-  }
-  .modal-header h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem; font-weight: 900; color: var(--cafe);
-  }
-  .modal-close {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: var(--crema); border: none;
-    font-size: 1.1rem; cursor: pointer; color: var(--cafe);
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .cart-items { margin-bottom: 1.5rem; }
-  .cart-item {
-    display: flex; align-items: center; gap: 1rem;
-    padding: 1rem 0; border-bottom: 1px solid rgba(59,26,14,0.1);
-  }
-  .cart-item-icon { font-size: 2rem; }
-  .cart-item-info { flex: 1; }
-  .cart-item-info h4 { font-size: 0.95rem; font-weight: 600; color: var(--cafe); }
-  .cart-item-info p { font-size: 0.8rem; color: var(--cafe-medio); margin-top: 2px; }
-  .cart-item-price { font-weight: 700; color: var(--rojo); }
-
-  .cart-qty {
-    display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem;
-  }
-  .cart-qty button {
-    width: 26px; height: 26px; border-radius: 50%;
-    border: 1.5px solid rgba(59,26,14,0.2);
-    background: transparent; cursor: pointer; font-size: 1rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s; color: var(--cafe);
-  }
-  .cart-qty button:hover { background: var(--rojo); color: var(--blanco); border-color: var(--rojo); }
-  .cart-qty span { font-weight: 600; min-width: 20px; text-align: center; }
-
-  .cart-total {
-    background: var(--crema); border-radius: 14px;
-    padding: 1.2rem 1.4rem; margin-bottom: 1.2rem;
-  }
-  .cart-total-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; }
-  .cart-total-row.total { font-weight: 700; font-size: 1.05rem; color: var(--cafe); border-top: 1px solid rgba(59,26,14,0.15); padding-top: 0.6rem; margin-top: 0.4rem; }
-
-  .cart-empty { text-align: center; padding: 3rem 1rem; color: var(--cafe-medio); }
-  .cart-empty .cart-empty-icon { font-size: 3.5rem; margin-bottom: 0.8rem; }
-
-  /* ── STORES ── */
-  .stores-section { background: var(--cafe); color: var(--blanco); }
-  .stores-section .section-title { color: var(--blanco); }
-  .stores-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.4rem; margin-top: 3rem;
+  .store-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
   }
   .store-card {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 16px; padding: 1.4rem 1.6rem;
-    transition: background 0.25s, transform 0.25s;
-    cursor: pointer;
+    padding: 18px;
+    min-height: 174px;
+    border-radius: var(--radius);
+    color: var(--white);
+    background: rgba(255,255,255,.08);
+    border: 1px solid var(--white-18);
+    transition: transform .25s ease, background .25s ease;
   }
-  .store-card:hover { background: rgba(255,255,255,0.11); transform: translateY(-3px); }
-  .store-card h4 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
-  .store-card p { font-size: 0.83rem; color: rgba(255,255,255,0.65); line-height: 1.55; }
-  .store-card .store-dist {
-    display: inline-block; margin-top: 0.8rem;
-    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--dorado);
+  .store-card:hover { transform: translateY(-5px); background: rgba(255,255,255,.14); }
+  .store-card h3 { margin: 0; font-size: 1.05rem; }
+  .store-card p { margin: 9px 0 0; color: var(--white-74); line-height: 1.5; }
+  .store-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    color: var(--green);
+    background: var(--yellow);
+    font-size: .74rem;
+    font-weight: 900;
   }
 
-  /* ── FAQ ── */
-  .faq-section { background: var(--crema); }
-  .faq-list { max-width: 760px; margin-top: 3rem; }
-  .faq-item { border-bottom: 1px solid rgba(59,26,14,0.15); }
-  .faq-q {
-    width: 100%; display: flex; align-items: center; justify-content: space-between;
-    padding: 1.3rem 0; background: transparent; border: none;
-    cursor: pointer; text-align: left;
-    font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600;
-    color: var(--cafe); gap: 1rem;
+  .visual-section {
+    padding: 0;
+    min-height: 560px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+    color: var(--white);
+    background: var(--green);
   }
-  .faq-q .faq-icon {
-    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
-    background: rgba(200,16,46,0.1); color: var(--rojo);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1rem; transition: transform 0.3s, background 0.3s;
-  }
-  .faq-item.open .faq-q .faq-icon { transform: rotate(45deg); background: var(--rojo); color: var(--blanco); }
-
-  .faq-a {
-    max-height: 0; overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.3s;
-    font-size: 0.93rem; color: var(--cafe-medio); line-height: 1.7;
-  }
-  .faq-item.open .faq-a { max-height: 300px; padding-bottom: 1.2rem; }
-
-  /* ── CONTACT ── */
-  .contact-section { background: linear-gradient(135deg, #1a0a05 0%, var(--cafe) 100%); color: var(--blanco); }
-  .contact-section .section-title { color: var(--blanco); }
-  .contact-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 3rem; margin-top: 3rem;
-  }
-  .contact-info h3 {
-    font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
-    margin-bottom: 1.2rem; color: var(--dorado);
-  }
-  .contact-item {
-    display: flex; align-items: flex-start; gap: 0.8rem;
-    margin-bottom: 1.1rem;
-  }
-  .contact-item-icon { font-size: 1.2rem; margin-top: 2px; }
-  .contact-item p { font-size: 0.9rem; color: rgba(255,255,255,0.75); line-height: 1.6; }
-  .contact-item strong { color: var(--blanco); display: block; margin-bottom: 0.15rem; }
-
-  .contact-form { }
-  .form-group { margin-bottom: 1.1rem; }
-  .form-group label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.4rem; color: rgba(255,255,255,0.7); letter-spacing: 0.06em; }
-  .form-group input, .form-group textarea, .form-group select {
+  .visual-section img {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    background: rgba(255,255,255,0.08);
-    border: 1.5px solid rgba(255,255,255,0.15);
-    border-radius: 12px; padding: 0.75rem 1rem;
-    color: var(--blanco); font-family: 'DM Sans', sans-serif; font-size: 0.93rem;
-    outline: none; transition: border-color 0.2s;
-    -webkit-appearance: none;
+    height: 120%;
+    object-fit: cover;
+    transform: translateY(calc(var(--photo-shift, 0) * -80px));
+    opacity: .72;
   }
-  .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.35); }
-  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--rojo); }
-  .form-group textarea { height: 110px; resize: vertical; }
-  .form-group select option { background: var(--cafe); }
+  .visual-copy {
+    position: relative;
+    z-index: 1;
+    width: min(900px, calc(100% - 32px));
+    text-align: center;
+    padding: 80px 0;
+  }
+  .visual-copy h2 {
+    margin: 0;
+    font-size: clamp(2.4rem, 6vw, 5.6rem);
+    line-height: .95;
+  }
+  .visual-copy p {
+    max-width: 620px;
+    margin: 20px auto 0;
+    color: var(--white-92);
+    line-height: 1.7;
+  }
 
-  /* ── FOOTER ── */
   footer {
-    background: #0e0503; color: rgba(255,255,255,0.6);
-    padding: 3rem 5% 2rem;
+    padding: 42px clamp(18px, 5vw, 76px);
+    color: var(--white);
+    background: var(--red);
   }
   .footer-grid {
-    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 2rem; margin-bottom: 2.5rem;
+    display: grid;
+    grid-template-columns: 1.3fr repeat(3, 1fr);
+    gap: 28px;
   }
-  .footer-brand .nav-logo { font-size: 1.6rem; display: block; margin-bottom: 0.8rem; }
-  .footer-brand p { font-size: 0.85rem; line-height: 1.65; max-width: 240px; }
-  .footer-col h5 {
-    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--blanco); margin-bottom: 1rem;
-  }
-  .footer-col ul { list-style: none; }
-  .footer-col ul li { margin-bottom: 0.55rem; }
-  .footer-col ul li a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
-  .footer-col ul li a:hover { color: var(--dorado); }
+  footer h3, footer h4 { margin: 0 0 12px; }
+  footer p, footer a { color: var(--white-74); line-height: 1.65; }
+  footer a { display: block; margin: 6px 0; }
   .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.08);
-    padding-top: 1.5rem;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 0.8rem; flex-wrap: wrap; gap: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 34px;
+    padding-top: 20px;
+    border-top: 1px solid var(--white-18);
+    color: var(--white-74);
   }
 
-  /* ── CART FAB ── */
-  .cart-fab {
-    position: fixed; bottom: 28px; right: 28px; z-index: 900;
-    width: 58px; height: 58px; border-radius: 50%;
-    background: var(--rojo); color: var(--blanco);
-    border: none; cursor: pointer; font-size: 1.35rem;
-    box-shadow: 0 6px 24px rgba(200,16,46,0.45);
-    display: flex; align-items: center; justify-content: center;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .cart-fab:hover { transform: scale(1.08); box-shadow: 0 10px 32px rgba(200,16,46,0.55); }
-  .cart-count {
-    position: absolute; top: 0; right: 0;
-    background: var(--dorado); color: var(--cafe);
-    width: 22px; height: 22px; border-radius: 50%;
-    font-size: 0.72rem; font-weight: 800;
-    display: flex; align-items: center; justify-content: center;
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
     display: none;
+    align-items: end;
+    justify-content: center;
+    background: rgba(41,95,47,.58);
+    backdrop-filter: blur(8px);
   }
-  .cart-count.visible { display: flex; }
-
-  /* ── TOAST ── */
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    width: min(620px, 100%);
+    max-height: 88vh;
+    overflow: auto;
+    padding: 22px;
+    border-radius: 18px 18px 0 0;
+    background: var(--white);
+    color: var(--green);
+    animation: sheet .28s ease both;
+  }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .modal-head h2 { margin: 0; }
+  .cart-list { display: grid; gap: 12px; margin-top: 20px; }
+  .cart-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid var(--green-14);
+    border-radius: var(--radius);
+  }
+  .cart-item h3 { margin: 0; font-size: 1rem; }
+  .cart-item p { margin: 5px 0 0; color: var(--green-72); }
+  .qty { display: flex; align-items: center; justify-content: end; gap: 8px; margin-top: 10px; }
+  .qty button {
+    width: 30px;
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: 50%;
+    color: var(--white);
+    background: var(--green);
+  }
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: var(--radius);
+    color: var(--white);
+    background: var(--green);
+    font-size: 1.1rem;
+    font-weight: 900;
+  }
   .toast {
-    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--cafe); color: var(--blanco);
-    padding: 0.75rem 1.8rem; border-radius: 100px;
-    font-size: 0.88rem; font-weight: 500;
-    opacity: 0; pointer-events: none;
-    transition: all 0.35s ease; z-index: 3000;
-    white-space: nowrap;
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    z-index: 80;
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    pointer-events: none;
+    padding: 13px 18px;
+    border-radius: 999px;
+    color: var(--white);
+    background: var(--green);
+    box-shadow: var(--shadow);
+    font-weight: 900;
+    transition: opacity .25s ease, transform .25s ease;
   }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-  /* ── MOBILE NAV DRAWER ── */
-  .mobile-nav {
-    display: none; position: fixed; inset: 0;
-    background: rgba(10,4,2,0.97); z-index: 1500;
-    flex-direction: column; align-items: center; justify-content: center;
-    gap: 2rem;
-    animation: fadeIn 0.3s ease;
-  }
-  .mobile-nav.open { display: flex; }
-  .mobile-nav a {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem; font-weight: 900; color: var(--blanco);
-    text-decoration: none; transition: color 0.2s;
-  }
-  .mobile-nav a:hover { color: var(--rojo); }
-  .mobile-nav-close {
-    position: absolute; top: 20px; right: 24px;
-    background: none; border: none; color: var(--blanco);
-    font-size: 2rem; cursor: pointer;
-  }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeInDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: none; } }
-  @keyframes fadeInUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: none; } }
-  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: none; } }
-  @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-8px); } }
-
-  .reveal {
-    opacity: 0; transform: translateY(32px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
   .reveal.visible { opacity: 1; transform: none; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @keyframes sheet { from { transform: translateY(100%); } to { transform: none; } }
+  @keyframes cue { 0%, 100% { transform: scaleY(.45); opacity: .45; } 50% { transform: scaleY(1); opacity: 1; } }
+  @keyframes floatPhone { 0%, 100% { transform: rotateY(-7deg) rotateX(2deg) translateY(0); } 50% { transform: rotateY(-5deg) rotateX(1deg) translateY(-12px); } }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
-    .contact-grid { grid-template-columns: 1fr; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    .phone { transform: none; }
+  }
+  @media (max-width: 1080px) {
+    .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .app-hero, .story-section { grid-template-columns: 1fr; }
+    .phone { transform: none; }
+  }
+  @media (max-width: 820px) {
+    :root { --nav: 66px; }
+    .topbar { grid-template-columns: auto auto auto; justify-content: space-between; }
+    .navlinks { display: none; }
+    .menu-toggle { display: grid; }
+    .intro-copy { grid-template-columns: 1fr; align-content: center; text-align: left; }
+    .basket-panel { min-height: 320px; }
+    .quick-stats { grid-template-columns: 1fr; }
+    .section-head { display: block; }
+    .stores-layout { grid-template-columns: 1fr; }
+    .store-tools { position: static; }
+    .store-grid { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
   }
-  @media (max-width: 600px) {
-    section { padding: 70px 5%; }
-    .products-header { flex-direction: column; align-items: flex-start; }
+  @media (max-width: 560px) {
+    .brand span { max-width: 108px; overflow: hidden; text-overflow: ellipsis; }
+    .nav-actions .btn { display: none; }
+    .harvest-stage { height: 260vh; }
+    .intro-copy h1 { font-size: clamp(2.8rem, 15vw, 4.5rem); }
+    .app-hero { padding-inline: 16px; }
+    .phone { width: min(350px, 100%); min-height: 610px; padding: 10px; border-radius: 28px; }
+    .phone-screen { min-height: 590px; border-radius: 22px; }
+    section.content-section { padding-inline: 16px; }
+    .product-grid { grid-template-columns: 1fr; }
+    .product-card { min-height: 390px; }
     .footer-grid { grid-template-columns: 1fr; }
-    .footer-bottom { flex-direction: column; text-align: center; }
-    .hero-btns { flex-direction: column; align-items: center; }
   }
 </style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">Juan <span>Valdez</span></a>
-  <ul class="nav-links">
-    <li><a href="#productos">Café</a></li>
-    <li><a href="#tiendas">Tiendas</a></li>
-    <li><a href="#preguntas">FAQ</a></li>
-    <li><a href="#contacto">Contacto</a></li>
-    <li><a href="#contacto" class="nav-cta">Pedir ahora</a></li>
-  </ul>
-  <button class="hamburger" onclick="openMobileNav()" aria-label="Menú">
-    <span></span><span></span><span></span>
-  </button>
+<header class="topbar">
+  <a class="brand" href="#inicio" aria-label="Inicio Juan Valdez">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32"><path d="M16 4c5 5 7 10 7 15a7 7 0 0 1-14 0c0-5 2-10 7-15Z"></path><path d="M16 7v18"></path><path d="M11 16c3 0 7-2 10-6"></path></svg>
+    </span>
+    <span>Juan Valdez</span>
+  </a>
+  <nav class="navlinks" aria-label="Principal">
+    <a href="#app">App</a>
+    <a href="#menu">Menú</a>
+    <a href="#origen">Origen</a>
+    <a href="#tiendas">Tiendas</a>
+  </nav>
+  <div class="nav-actions">
+    <button class="icon-btn" type="button" onclick="openCart()" aria-label="Abrir carrito">
+      <svg viewBox="0 0 24 24"><path d="M6 7h15l-2 9H8L6 3H3"></path><path d="M9 20h.01"></path><path d="M18 20h.01"></path></svg>
+      <span class="cart-dot" id="cartDot">0</span>
+    </button>
+    <a class="btn btn-primary" href="#app">Ingresar</a>
+    <button class="menu-toggle" type="button" onclick="toggleMobile()" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg>
+    </button>
+  </div>
+</header>
+<nav class="mobile-panel" id="mobilePanel" aria-label="Móvil">
+  <a href="#app" onclick="toggleMobile(false)">App</a>
+  <a href="#menu" onclick="toggleMobile(false)">Menú</a>
+  <a href="#origen" onclick="toggleMobile(false)">Origen</a>
+  <a href="#tiendas" onclick="toggleMobile(false)">Tiendas</a>
 </nav>
 
-<!-- MOBILE NAV -->
-<div class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
-  <a href="#productos" onclick="closeMobileNav()">Café</a>
-  <a href="#tiendas" onclick="closeMobileNav()">Tiendas</a>
-  <a href="#preguntas" onclick="closeMobileNav()">FAQ</a>
-  <a href="#contacto" onclick="closeMobileNav()">Contacto</a>
-</div>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg-text">CAFÉ</div>
-  <div class="hero-content">
-    <div class="hero-badge">☕ El café de todo un país</div>
-    <h1>Bienvenidos a<br><em>Juan Valdez</em> Café</h1>
-    <p>Descubre la riqueza del café colombiano en cada sorbo. Haz tu pedido con anticipación, sáltate la fila y obtén promos con nuestra app.</p>
-    <div class="hero-btns">
-      <a href="#productos" class="btn btn-primary">Ver productos</a>
-      <a href="#tiendas" class="btn btn-outline">Encuentra tu tienda</a>
-    </div>
-  </div>
-  <div class="hero-scroll">Scroll</div>
-</section>
-
-<!-- APP BANNER -->
-<div class="app-banner reveal">
-  <div>
-    <h2>📱 Descarga la aplicación Juan Valdez</h2>
-    <p>¡Haz tu pedido con anticipación, sáltate la fila y obtén promos exclusivas con nuestra aplicación!</p>
-    <div class="app-badges">
-      <div class="app-badge">🍎 App Store</div>
-      <div class="app-badge">▶ Google Play</div>
-    </div>
-  </div>
-  <div style="font-size:6rem;">☕</div>
-</div>
-
-<!-- PRODUCTS -->
-<section class="products-section" id="productos">
-  <div class="products-header reveal">
-    <div>
-      <p class="section-label">Nuestro catálogo</p>
-      <h2 class="section-title">Café Molido<br>y <em>en Grano</em></h2>
-    </div>
-    <a href="#contacto" class="btn btn-primary">Ver menú completo</a>
-  </div>
-
-  <div class="filter-bar reveal">
-    <button class="filter-chip active" onclick="filterProducts('all', this)">Todos</button>
-    <button class="filter-chip" onclick="filterProducts('origen', this)">Origen</button>
-    <button class="filter-chip" onclick="filterProducts('premium', this)">Premium</button>
-    <button class="filter-chip" onclick="filterProducts('sostenible', this)">Sostenible</button>
-    <button class="filter-chip" onclick="filterProducts('fuerte', this)">Fuerte</button>
-    <button class="filter-chip" onclick="filterProducts('suave', this)">Suave</button>
-  </div>
-
-  <div class="products-grid" id="productsGrid">
-    <!-- cards injected by JS -->
-  </div>
-</section>
-
-<!-- STORES -->
-<section class="stores-section" id="tiendas">
-  <div class="reveal">
-    <p class="section-label" style="color:var(--dorado)">Cerca de ti</p>
-    <h2 class="section-title">Encuentra tu<br><em style="color:var(--rojo)">Juan Valdez</em></h2>
-  </div>
-  <div class="stores-grid reveal">
-    <div class="store-card">
-      <h4>Plaza de las Américas</h4>
-      <p>Cra. 71d #6-94 SUR 1214, Bogotá</p>
-      <span class="store-dist">📍 Bogotá</span>
-    </div>
-    <div class="store-card">
-      <h4>Éxito Tunal</h4>
-      <p>Cl. 47b Sur #24B - 33 Lc 103A, Bogotá</p>
-      <span class="store-dist">📍 Bogotá</span>
-    </div>
-    <div class="store-card">
-      <h4>Centro Mayor</h4>
-      <p>CC Centro Mayor, Cl. 38A Sur #34D-50 Local 3027 (Tercer Piso), Antonio Nariño</p>
-      <span class="store-dist">📍 Bogotá</span>
-    </div>
-    <div class="store-card">
-      <h4>City U</h4>
-      <p>Viviendas Universitarias, Cl. 19 #2A-10 Local 109, Santa Fé, Bogotá</p>
-      <span class="store-dist">📍 Bogotá</span>
-    </div>
-    <div class="store-card">
-      <h4>El Retiro</h4>
-      <p>Calle 81 #11-94, Local 134, Chapinero, Bogotá</p>
-      <span class="store-dist">📍 Bogotá</span>
-    </div>
-    <div class="store-card">
-      <h4>Gran Estación</h4>
-      <p>Av. Cra. 60 #20-16, Local 1-123, Bogotá</p>
-      <span class="store-dist">📍 Bogotá</span>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq-section" id="preguntas">
-  <div class="reveal">
-    <p class="section-label">Resolvemos tus dudas</p>
-    <h2 class="section-title">Preguntas<br><em>Frecuentes</em></h2>
-  </div>
-  <div class="faq-list reveal">
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        ¿Cuál es la diferencia entre el café molido y el café en grano?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">El café en grano conserva sus aromas y sabores por más tiempo, ya que la oxidación comienza al moler. El café molido es más conveniente si no tienes molinillo. Recomendamos comprar en grano y moler justo antes de preparar para una experiencia óptima.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        ¿Qué tipo de café debo elegir según mi método de preparación?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Para prensa francesa usa molienda gruesa; para espresso, molienda fina; para goteo o drip, molienda media. En Juan Valdez encontrarás cada producto etiquetado con el método ideal para orientar tu elección.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        ¿Cuál es el mejor café molido para cafetera eléctrica?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Para cafetera eléctrica de goteo recomendamos una molienda media-fina. El Café Origen Sierra Nevada y el Café Premium Volcán son excelentes opciones por su perfil equilibrado que se expresa perfecto en este método.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        ¿Cómo conservar el café en grano para mantener su frescura?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Guarda el café en un recipiente hermético, en un lugar fresco, oscuro y seco. Evita el refrigerador o congelador, ya que la humedad y los olores deterioran el sabor. Lo ideal es consumirlo dentro de los 30 días de apertura del empaque.</div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        ¿Tienen envío a domicilio?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a">Sí, puedes realizar tu pedido a través de nuestra tienda en línea o la aplicación Juan Valdez. Los impuestos y costos de envío se calculan al finalizar la compra según tu ubicación.</div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="contact-section" id="contacto">
-  <div class="reveal">
-    <p class="section-label" style="color:var(--dorado)">Estamos para ti</p>
-    <h2 class="section-title">Contáctanos</h2>
-  </div>
-  <div class="contact-grid reveal">
-    <div class="contact-info">
-      <h3>Información de contacto</h3>
-      <div class="contact-item">
-        <div class="contact-item-icon">📞</div>
-        <p><strong>Teléfonos</strong>(601) 482 41 51<br>01 8000 517711 (línea gratuita)</p>
+<main class="site-shell">
+  <section class="harvest-stage" id="inicio" aria-label="Recorrido del café">
+    <div class="harvest-sticky">
+      <div class="harvest-photo"></div>
+      <div class="leaf-pattern"></div>
+      <div class="falling-beans" id="fallingBeans"></div>
+      <div class="intro-copy">
+        <div>
+          <span class="intro-kicker">Del árbol a tu app</span>
+          <h1>El café cae en la canasta. La experiencia continúa.</h1>
+          <p>Desliza para recoger las pepas de café desde el cafetal y entrar a una experiencia digital inspirada en la aplicación de Juan Valdez.</p>
+          <a class="btn enter-chip" href="#app">Entrar a la experiencia</a>
+        </div>
+        <div class="basket-panel" aria-hidden="true">
+          <div class="basket"></div>
+        </div>
       </div>
-      <div class="contact-item">
-        <div class="contact-item-icon">🕐</div>
-        <p><strong>Horarios de atención</strong>Lunes a sábado: 8am – 8pm<br>Domingos y festivos: 8am – 6pm</p>
+      <div class="scroll-cue">Desliza <span></span></div>
+    </div>
+  </section>
+
+  <section class="app-hero" id="app">
+    <div class="reveal">
+      <p class="eyebrow">App Juan Valdez</p>
+      <h2 class="display">Login, puntos y pedidos sin perder espacio.</h2>
+      <p class="lead">Una interfaz compacta para computador, tablet y celular: inicio de sesión simulado, saldo de puntos, recompensas, menú por categorías, carrito y tiendas cercanas en Bogotá y Colombia.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#menu">Ver menú</a>
+        <a class="btn btn-ghost" href="#tiendas">Buscar tiendas</a>
       </div>
-      <div class="contact-item">
-        <div class="contact-item-icon">✉️</div>
-        <p><strong>Correo electrónico</strong>cuentaconjuan@juanvaldezcafe.com</p>
-      </div>
-      <div style="margin-top:2rem;">
-        <a href="#productos" class="btn btn-gold">Ver productos ☕</a>
+      <div class="quick-stats" aria-label="Indicadores de fidelización">
+        <div class="stat"><strong id="statPoints">12.450</strong><span>Puntos disponibles</span></div>
+        <div class="stat"><strong>68%</strong><span>Meta próxima recompensa</span></div>
+        <div class="stat"><strong>18</strong><span>Tiendas destacadas</span></div>
       </div>
     </div>
+    <div class="phone-wrap reveal">
+      <div class="phone" aria-label="Vista de aplicación">
+        <div class="phone-screen">
+          <div class="phone-top">
+            <div class="phone-top-row">
+              <div>
+                <strong id="phoneGreeting">Hola, Natalia</strong>
+                <div style="color:var(--white-74);margin-top:4px">Nivel Origen</div>
+              </div>
+              <div class="avatar" id="avatar">N</div>
+            </div>
+            <div class="points-card">
+              <small>Puntos de fidelización</small>
+              <strong id="pointsBalance">12.450</strong>
+              <div class="progress"><span></span></div>
+              <p class="small-note">Faltan 5 compras para desbloquear una bebida especial.</p>
+            </div>
+          </div>
+          <div class="phone-tabs" role="tablist">
+            <button class="active" type="button" onclick="showPane('login', this)">Login</button>
+            <button type="button" onclick="showPane('rewards', this)">Puntos</button>
+            <button type="button" onclick="showPane('nearby', this)">Cerca</button>
+          </div>
+          <div class="phone-body">
+            <div class="app-pane active" id="pane-login">
+              <form class="login-box" onsubmit="loginDemo(event)">
+                <input class="field" id="nameInput" type="text" placeholder="Nombre" value="Natalia">
+                <input class="field" type="email" placeholder="correo@ejemplo.com" value="natalia@correo.com">
+                <button class="btn btn-primary" type="submit">Entrar y actualizar puntos</button>
+              </form>
+              <p class="small-note">Demo local: no envía datos, solo actualiza la experiencia visual.</p>
+            </div>
+            <div class="app-pane" id="pane-rewards">
+              <div class="story-list">
+                <div class="story-item"><div class="story-icon">2x</div><div><h3>Bebida favorita</h3><p>Canje sugerido: latte frío o espresso campesino.</p></div></div>
+                <div class="story-item"><div class="story-icon">$</div><div><h3>Bono de tienda</h3><p>Usa puntos en productos empacados y accesorios.</p></div></div>
+              </div>
+            </div>
+            <div class="app-pane" id="pane-nearby">
+              <div class="story-list">
+                <div class="story-item"><div class="story-icon">1</div><div><h3>Parque 93</h3><p>Abierto ahora. Entrega y consumo en tienda.</p></div></div>
+                <div class="story-item"><div class="story-icon">2</div><div><h3>Gran Estación</h3><p>Ideal para recoger pedido en ruta.</p></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <form class="contact-form" onsubmit="submitForm(event)">
-      <div class="form-group">
-        <label>Nombre completo</label>
-        <input type="text" placeholder="Tu nombre" required>
+  <section class="content-section menu-section" id="menu">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Menú</p>
+        <h2>Café, bebidas y antojos.</h2>
+        <p>Filtra por categoría y agrega productos al carrito. La composición usa tarjetas compactas para aprovechar bien pantallas pequeñas y grandes.</p>
       </div>
-      <div class="form-group">
-        <label>Correo electrónico</label>
-        <input type="email" placeholder="tu@correo.com" required>
+      <div class="filter-row" id="filters"></div>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+  </section>
+
+  <section class="content-section story-section" id="origen">
+    <div class="story-media reveal">
+      <img src="assets/manual-p20-1.jpg" alt="Empaque rojo Juan Valdez Volcán con elementos de café">
+    </div>
+    <div class="reveal">
+      <p class="eyebrow">Manual de marca</p>
+      <h2 class="display">Color, origen y trazo limpio.</h2>
+      <p class="lead">La página se mantiene dentro de los colores indicados por el PDF y toma su dirección visual: fotografía cálida, composición limpia, hojas de café, líneas simples y énfasis en autenticidad colombiana.</p>
+      <div class="story-list">
+        <div class="story-item"><div class="story-icon">R</div><div><h3>Rojo #D70021</h3><p>Punto de energía para acciones, acentos y productos destacados.</p></div></div>
+        <div class="story-item"><div class="story-icon">V</div><div><h3>Verde #295F2F</h3><p>Base natural para navegación, confianza y secciones de tiendas.</p></div></div>
+        <div class="story-item"><div class="story-icon">A</div><div><h3>Amarillo #F8C231 y oliva #BAB93D</h3><p>Refuerzan vitalidad, cosecha y microinteracciones.</p></div></div>
       </div>
-      <div class="form-group">
-        <label>Asunto</label>
-        <select>
-          <option>Consulta sobre producto</option>
-          <option>Pedido en línea</option>
-          <option>Ubicación de tienda</option>
-          <option>Aplicación móvil</option>
-          <option>Otro</option>
+    </div>
+  </section>
+
+  <section class="content-section stores-section" id="tiendas">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Tiendas cercanas</p>
+        <h2>Bogotá y Colombia.</h2>
+        <p>Selector de ciudad con sedes representativas. En una versión productiva se conectaría a mapas/geolocalización.</p>
+      </div>
+    </div>
+    <div class="stores-layout reveal">
+      <aside class="store-tools">
+        <strong>Encuentra tu tienda</strong>
+        <select class="field" id="citySelect" onchange="renderStores()">
+          <option value="all">Colombia</option>
+          <option value="Bogotá">Bogotá</option>
+          <option value="Medellín">Medellín</option>
+          <option value="Cali">Cali</option>
+          <option value="Cartagena">Cartagena</option>
+          <option value="Barranquilla">Barranquilla</option>
         </select>
-      </div>
-      <div class="form-group">
-        <label>Mensaje</label>
-        <textarea placeholder="¿En qué podemos ayudarte?"></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Enviar mensaje →</button>
-    </form>
-  </div>
-</section>
+        <input class="field" id="storeSearch" type="search" placeholder="Buscar por zona" oninput="renderStores()">
+        <button class="btn btn-yellow" type="button" onclick="nearMe()">Usar mi ubicación</button>
+        <p class="small-note" id="storeHint">Mostrando sedes destacadas en Colombia.</p>
+      </aside>
+      <div class="store-grid" id="storeGrid"></div>
+    </div>
+  </section>
 
-<!-- FOOTER -->
+  <section class="visual-section" aria-label="Cierre visual">
+    <img src="assets/manual-p12-3.jpg" alt="Ritual de café colombiano">
+    <div class="visual-copy reveal">
+      <p class="eyebrow">Una experiencia continua</p>
+      <h2>Del cafetal, a la canasta, a tu próxima taza.</h2>
+      <p>Animaciones suaves, scroll visual y una estructura de app que se adapta sin desperdiciar espacio en PC, tablet y celular.</p>
+    </div>
+  </section>
+</main>
+
 <footer>
   <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="#" class="nav-logo">Juan <span>Valdez</span></a>
-      <p>El café de todo un país. Cafés colombianos de origen con los más altos estándares de calidad.</p>
+    <div>
+      <h3>Juan Valdez</h3>
+      <p>Prototipo web responsive basado en el manual de marca suministrado.</p>
     </div>
-    <div class="footer-col">
-      <h5>Café empacado</h5>
-      <ul>
-        <li><a href="#">Molido / Grano</a></li>
-        <li><a href="#">Café Liofilizado</a></li>
-        <li><a href="#">Consumo Individual</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h5>Artículos</h5>
-      <ul>
-        <li><a href="#">Termos</a></li>
-        <li><a href="#">Mugs y Vajillas</a></li>
-        <li><a href="#">Accesorios</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h5>Acerca de</h5>
-      <ul>
-        <li><a href="#">Nuestra historia</a></li>
-        <li><a href="#">Contáctenos</a></li>
-        <li><a href="#">Términos y Condiciones</a></li>
-        <li><a href="#">Política de datos</a></li>
-        <li><a href="#">Promociones</a></li>
-      </ul>
-    </div>
+    <div><h4>App</h4><a href="#app">Login</a><a href="#app">Puntos</a><a href="#menu">Pedido</a></div>
+    <div><h4>Explorar</h4><a href="#origen">Origen</a><a href="#tiendas">Tiendas</a><a href="#inicio">Cosecha</a></div>
+    <div><h4>Colores</h4><a>#D70021</a><a>#295F2F</a><a>#F8C231</a></div>
   </div>
   <div class="footer-bottom">
-    <span>@2026 Juan Valdez. Todos los derechos reservados.</span>
-    <span>Hecho con ☕ en Colombia</span>
+    <span>© 2026 Juan Valdez. Experiencia conceptual.</span>
+    <span>Paleta aplicada según manual de marca.</span>
   </div>
 </footer>
 
-<!-- CART FAB -->
-<button class="cart-fab" onclick="openCart()" aria-label="Ver carrito">
-  🛒
-  <span class="cart-count" id="cartCount">0</span>
-</button>
-
-<!-- CART MODAL -->
-<div class="modal-overlay" id="cartModal">
+<div class="modal-backdrop" id="cartModal" onclick="backdropClose(event)">
   <div class="modal">
-    <div class="modal-header">
-      <h3>🛒 Tu carrito</h3>
-      <button class="modal-close" onclick="closeCart()">✕</button>
+    <div class="modal-head">
+      <h2>Tu pedido</h2>
+      <button class="icon-btn" type="button" onclick="closeCart()" aria-label="Cerrar carrito">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12"></path><path d="M18 6L6 18"></path></svg>
+      </button>
     </div>
-    <div class="cart-items" id="cartItems"></div>
-    <div id="cartSummary"></div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:0.5rem;" onclick="checkout()">Finalizar compra →</button>
+    <div class="cart-list" id="cartList"></div>
+    <div class="cart-total" id="cartTotal"></div>
+    <button class="btn btn-primary" style="width:100%;margin-top:14px" type="button" onclick="checkout()">Finalizar pedido</button>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
-// ── DATA ──
-const products = [
-  { id:1, name:'Café Premium Volcán 454gr', desc:'Fuerte, notas de dulce caramelo y cacao. Disponible en grano o molido.', price:49900, badge:'Nuevo', tags:['Fuerte','Premium'], emoji:'🌋', cat:['premium','fuerte'] },
-  { id:2, name:'Café Origen Sierra Nevada 454gr', desc:'Balanceado, perfil suave con notas florales y cítricas únicas del macizo.', price:50925, oldPrice:67900, badge:'Origen', tags:['Balanceado','Origen'], emoji:'⛰️', cat:['origen'] },
-  { id:3, name:'Café Origen Huila 454gr', desc:'Dulce y afrutado, con acidez brillante característica del sur del país.', price:50925, oldPrice:67900, badge:'Origen', tags:['Suave','Origen'], emoji:'☕', cat:['origen','suave'] },
-  { id:4, name:'Café Origen Nariño 454gr', desc:'Acidez pronunciada y cuerpo dulce, perfil gourmet de alta montaña.', price:50925, oldPrice:67900, badge:'Origen', tags:['Balanceado','Origen'], emoji:'🏔️', cat:['origen'] },
-  { id:5, name:'Línea Premium Selection', desc:'Seleccionados con los más altos estándares de calidad y atributos únicos.', price:67900, badge:'Premium', tags:['Premium','Fuerte'], emoji:'⭐', cat:['premium','fuerte'] },
-  { id:6, name:'Café Línea Sostenible 340gr', desc:'Cultivado con prácticas responsables. Certificación de sostenibilidad ambiental.', price:44900, badge:'Eco', tags:['Sostenible','Suave'], emoji:'🌿', cat:['sostenible','suave'] },
+const beansLayer = document.getElementById("fallingBeans");
+const beanSeeds = [
+  [10, 11, 49, 70, 320], [20, 16, 52, 68, -220], [31, 10, 47, 73, 260], [42, 18, 54, 72, -180],
+  [56, 12, 50, 69, 240], [68, 17, 53, 71, -260], [79, 10, 48, 74, 210], [90, 15, 51, 70, -300],
+  [15, 28, 49, 67, 160], [36, 31, 52, 71, -140], [63, 27, 48, 69, 190], [84, 32, 53, 73, -230]
 ];
+beansLayer.innerHTML = beanSeeds.map(([x, y, tx, ty, spin]) =>
+  `<span class="bean" style="--x:${x};--start-y:${y};--target-x:${tx};--target-y:${ty};--spin:${spin}"></span>`
+).join("");
 
+const products = [
+  { id: 1, name: "Café Volcán fuerte", cat: "Café", price: 49900, badge: "Fuerte", desc: "Perfil intenso con notas de cacao y carácter colombiano.", image: "assets/manual-p20-1.jpg" },
+  { id: 2, name: "Origen Sierra Nevada", cat: "Café", price: 50900, badge: "Origen", desc: "Balance suave, notas frutales y aroma limpio.", image: "" },
+  { id: 3, name: "Latte frío", cat: "Bebidas", price: 13900, badge: "App", desc: "Café frío, leche y textura cremosa para recoger en tienda.", image: "" },
+  { id: 4, name: "Nevado de café", cat: "Bebidas", price: 16900, badge: "Favorito", desc: "Bebida fría con café colombiano y acabado dulce.", image: "" },
+  { id: 5, name: "Croissant campesino", cat: "Comida", price: 11900, badge: "Horno", desc: "Acompañante salado para desayunos o medias tardes.", image: "" },
+  { id: 6, name: "Torta de zanahoria", cat: "Comida", price: 10900, badge: "Dulce", desc: "Porción suave para maridar con cafés de origen.", image: "" },
+  { id: 7, name: "Mug Juan Valdez", cat: "Tienda", price: 29900, badge: "Regalo", desc: "Accesorio de marca para rituales en casa.", image: "" },
+  { id: 8, name: "Termo viajero", cat: "Tienda", price: 59900, badge: "Ruta", desc: "Para llevar café caliente o frío por la ciudad.", image: "" }
+];
+const stores = [
+  { city: "Bogotá", name: "Parque 93", zone: "Chicó", address: "Calle 93A con carrera 13", services: ["App", "Mesa"] },
+  { city: "Bogotá", name: "Gran Estación", zone: "Salitre", address: "Av. Cra. 60 #24-09", services: ["Recoger", "Mesa"] },
+  { city: "Bogotá", name: "Centro Mayor", zone: "Antonio Nariño", address: "Cl. 38A Sur #34D-50", services: ["App", "Recoger"] },
+  { city: "Bogotá", name: "City U", zone: "Centro", address: "Cl. 19 #2A-10", services: ["Rápido", "App"] },
+  { city: "Bogotá", name: "El Retiro", zone: "Chapinero", address: "Calle 81 #11-94", services: ["Mesa", "App"] },
+  { city: "Medellín", name: "Oviedo", zone: "El Poblado", address: "Cra. 43A #6 Sur-15", services: ["Mesa", "App"] },
+  { city: "Cali", name: "Chipichape", zone: "Norte", address: "Cl. 38N #6N-35", services: ["Recoger", "Mesa"] },
+  { city: "Cartagena", name: "Centro Histórico", zone: "Centro", address: "Zona amurallada", services: ["Mesa", "Turismo"] },
+  { city: "Barranquilla", name: "Buenavista", zone: "Riomar", address: "Cra. 53 #98-99", services: ["App", "Mesa"] }
+];
+let currentCategory = "Todo";
 let cart = [];
-let currentFilter = 'all';
 
-// ── RENDER PRODUCTS ──
-function renderProducts(filter='all') {
-  const grid = document.getElementById('productsGrid');
-  const filtered = filter==='all' ? products : products.filter(p => p.cat.includes(filter));
-  grid.innerHTML = filtered.map(p => `
-    <div class="product-card" data-id="${p.id}">
-      <div class="product-img">
-        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
-        <span>${p.emoji}</span>
+function updateScrollVisuals() {
+  const stage = document.querySelector(".harvest-stage");
+  const rect = stage.getBoundingClientRect();
+  const max = stage.offsetHeight - innerHeight;
+  const progress = Math.min(1, Math.max(0, -rect.top / max));
+  document.documentElement.style.setProperty("--intro-progress", progress.toFixed(3));
+  const visual = document.querySelector(".visual-section");
+  if (visual) {
+    const v = visual.getBoundingClientRect();
+    const shift = Math.min(1, Math.max(0, (innerHeight - v.top) / (innerHeight + v.height)));
+    document.documentElement.style.setProperty("--photo-shift", shift.toFixed(3));
+  }
+}
+addEventListener("scroll", updateScrollVisuals, { passive: true });
+addEventListener("resize", updateScrollVisuals);
+updateScrollVisuals();
+
+function renderFilters() {
+  const cats = ["Todo", ...new Set(products.map(p => p.cat))];
+  document.getElementById("filters").innerHTML = cats.map(cat =>
+    `<button class="filter ${cat === currentCategory ? "active" : ""}" type="button" onclick="setCategory('${cat}')">${cat}</button>`
+  ).join("");
+}
+function cupSvg() {
+  return `<svg class="cup-illustration" viewBox="0 0 100 110" aria-hidden="true"><path d="M23 34h50v31a22 22 0 0 1-22 22h-6a22 22 0 0 1-22-22V34Z" fill="none" stroke="currentColor" stroke-width="6"/><path d="M73 43h8a12 12 0 0 1 0 24h-8" fill="none" stroke="currentColor" stroke-width="6"/><path d="M30 24c4-5 4-10 0-15M47 24c4-5 4-10 0-15M64 24c4-5 4-10 0-15" fill="none" stroke="currentColor" stroke-width="5"/><path d="M22 94h55" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>`;
+}
+function renderProducts() {
+  const list = currentCategory === "Todo" ? products : products.filter(p => p.cat === currentCategory);
+  document.getElementById("productGrid").innerHTML = list.map(p => `
+    <article class="product-card reveal">
+      <div class="product-art">
+        ${p.image ? `<img src="${p.image}" alt="${p.name}">` : cupSvg()}
+        <span class="product-badge">${p.badge}</span>
       </div>
       <div class="product-info">
-        <div class="product-name">${p.name}</div>
-        <div class="product-desc">${p.desc}</div>
-        <div class="product-tags">${p.tags.map(t=>`<span class="product-tag">${t}</span>`).join('')}</div>
+        <div>
+          <h3>${p.name}</h3>
+          <p>${p.desc}</p>
+        </div>
         <div class="product-footer">
-          <div class="product-price">
-            ${p.oldPrice ? `<s>$${p.oldPrice.toLocaleString()}</s>` : ''}
-            $${p.price.toLocaleString()}
-          </div>
-          <button class="add-btn" onclick="addToCart(${p.id})" aria-label="Agregar al carrito">+</button>
+          <span class="price">$${p.price.toLocaleString("es-CO")}</span>
+          <button class="add" type="button" onclick="addToCart(${p.id})" aria-label="Agregar ${p.name}">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+          </button>
         </div>
       </div>
-    </div>
-  `).join('');
+    </article>
+  `).join("");
+  observeReveals();
+}
+function setCategory(cat) { currentCategory = cat; renderFilters(); renderProducts(); }
+
+function renderStores() {
+  const city = document.getElementById("citySelect").value;
+  const query = document.getElementById("storeSearch").value.trim().toLowerCase();
+  const list = stores.filter(s => (city === "all" || s.city === city) && (!query || `${s.name} ${s.zone} ${s.address}`.toLowerCase().includes(query)));
+  document.getElementById("storeGrid").innerHTML = list.map(s => `
+    <article class="store-card">
+      <h3>${s.name}</h3>
+      <p>${s.address}<br>${s.zone}, ${s.city}</p>
+      <div class="store-meta">${s.services.map(x => `<span class="pill">${x}</span>`).join("")}</div>
+    </article>
+  `).join("") || `<article class="store-card"><h3>Sin resultados</h3><p>Prueba otra ciudad o zona.</p></article>`;
+  document.getElementById("storeHint").textContent = city === "all" ? "Mostrando sedes destacadas en Colombia." : `Mostrando sedes destacadas en ${city}.`;
+}
+function nearMe() {
+  document.getElementById("citySelect").value = "Bogotá";
+  document.getElementById("storeSearch").value = "";
+  renderStores();
+  showToast("Ubicación demo: Bogotá seleccionada");
 }
 
-function filterProducts(cat, btn) {
-  currentFilter = cat;
-  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
-  btn.classList.add('active');
-  renderProducts(cat);
-}
-
-// ── CART ──
 function addToCart(id) {
-  const p = products.find(x=>x.id===id);
-  const existing = cart.find(x=>x.id===id);
-  if (existing) existing.qty++;
-  else cart.push({...p, qty:1});
-  updateCartBadge();
-  showToast(`☕ ${p.name.split(' ').slice(0,3).join(' ')} agregado`);
+  const item = products.find(p => p.id === id);
+  const existing = cart.find(p => p.id === id);
+  if (existing) existing.qty += 1;
+  else cart.push({ ...item, qty: 1 });
+  updateCart();
+  showToast(`${item.name} agregado`);
 }
-
-function updateCartBadge() {
-  const total = cart.reduce((s,i)=>s+i.qty,0);
-  const el = document.getElementById('cartCount');
-  el.textContent = total;
-  el.classList.toggle('visible', total>0);
+function updateCart() {
+  const count = cart.reduce((sum, item) => sum + item.qty, 0);
+  const dot = document.getElementById("cartDot");
+  dot.textContent = count;
+  dot.classList.toggle("show", count > 0);
 }
-
+function openCart() {
+  renderCart();
+  document.getElementById("cartModal").classList.add("open");
+  document.body.classList.add("locked");
+}
+function closeCart() {
+  document.getElementById("cartModal").classList.remove("open");
+  document.body.classList.remove("locked");
+}
+function backdropClose(event) { if (event.target.id === "cartModal") closeCart(); }
 function renderCart() {
-  const el = document.getElementById('cartItems');
-  const sum = document.getElementById('cartSummary');
+  const list = document.getElementById("cartList");
+  const total = document.getElementById("cartTotal");
   if (!cart.length) {
-    el.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Tu carrito está vacío.<br>¡Agrega tu café favorito!</p></div>`;
-    sum.innerHTML = '';
+    list.innerHTML = `<p class="small-note">Tu carrito está vacío. Agrega un café o una bebida desde el menú.</p>`;
+    total.innerHTML = `<span>Total</span><span>$0</span>`;
     return;
   }
-  el.innerHTML = cart.map(item => `
+  list.innerHTML = cart.map(item => `
     <div class="cart-item">
-      <div class="cart-item-icon">${item.emoji}</div>
-      <div class="cart-item-info">
-        <h4>${item.name}</h4>
-        <div class="cart-qty">
-          <button onclick="changeQty(${item.id},-1)">−</button>
-          <span>${item.qty}</span>
-          <button onclick="changeQty(${item.id},1)">+</button>
-        </div>
+      <div><h3>${item.name}</h3><p>$${item.price.toLocaleString("es-CO")} x ${item.qty}</p></div>
+      <div>
+        <strong>$${(item.price * item.qty).toLocaleString("es-CO")}</strong>
+        <div class="qty"><button onclick="changeQty(${item.id}, -1)">-</button><span>${item.qty}</span><button onclick="changeQty(${item.id}, 1)">+</button></div>
       </div>
-      <div class="cart-item-price">$${(item.price*item.qty).toLocaleString()}</div>
     </div>
-  `).join('');
-  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
-  sum.innerHTML = `
-    <div class="cart-total">
-      <div class="cart-total-row"><span>Subtotal</span><span>$${subtotal.toLocaleString()}</span></div>
-      <div class="cart-total-row"><span>Envío</span><span>Se calcula al finalizar</span></div>
-      <div class="cart-total-row total"><span>Total</span><span>$${subtotal.toLocaleString()}</span></div>
-    </div>
-  `;
+  `).join("");
+  const sum = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+  total.innerHTML = `<span>Total estimado</span><span>$${sum.toLocaleString("es-CO")}</span>`;
 }
-
 function changeQty(id, delta) {
-  const item = cart.find(x=>x.id===id);
+  const item = cart.find(p => p.id === id);
   if (!item) return;
   item.qty += delta;
-  if (item.qty <= 0) cart = cart.filter(x=>x.id!==id);
-  updateCartBadge();
+  if (item.qty <= 0) cart = cart.filter(p => p.id !== id);
+  updateCart();
   renderCart();
 }
-
-function openCart() { document.getElementById('cartModal').classList.add('open'); renderCart(); }
-function closeCart() { document.getElementById('cartModal').classList.remove('open'); }
-
 function checkout() {
-  if (!cart.length) return;
+  if (!cart.length) return showToast("Agrega productos primero");
   cart = [];
-  updateCartBadge();
+  updateCart();
   closeCart();
-  showToast('✅ ¡Pedido realizado con éxito!');
+  showToast("Pedido demo creado");
 }
 
-// ── TOAST ──
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2400);
+function showPane(name, button) {
+  document.querySelectorAll(".app-pane").forEach(p => p.classList.remove("active"));
+  document.getElementById(`pane-${name}`).classList.add("active");
+  document.querySelectorAll(".phone-tabs button").forEach(b => b.classList.remove("active"));
+  button.classList.add("active");
+}
+function loginDemo(event) {
+  event.preventDefault();
+  const name = document.getElementById("nameInput").value.trim() || "Cliente";
+  const points = Math.floor(11000 + Math.random() * 5000);
+  document.getElementById("phoneGreeting").textContent = `Hola, ${name}`;
+  document.getElementById("avatar").textContent = name[0].toUpperCase();
+  document.getElementById("pointsBalance").textContent = points.toLocaleString("es-CO");
+  document.getElementById("statPoints").textContent = points.toLocaleString("es-CO");
+  showToast("Sesión demo actualizada");
+}
+function toggleMobile(force) {
+  const panel = document.getElementById("mobilePanel");
+  const open = typeof force === "boolean" ? force : !panel.classList.contains("open");
+  panel.classList.toggle("open", open);
 }
 
-// ── FAQ ──
-function toggleFaq(btn) {
-  const item = btn.parentElement;
-  item.classList.toggle('open');
+let revealObserver;
+function observeReveals() {
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    }, { threshold: .12 });
+  }
+  document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+}
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
 }
 
-// ── FORM ──
-function submitForm(e) {
-  e.preventDefault();
-  showToast('✅ Mensaje enviado. ¡Te contactaremos pronto!');
-  e.target.reset();
-}
-
-// ── MOBILE NAV ──
-function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
-function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
-
-// ── SCROLL REVEAL ──
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// Close modal on overlay click
-document.getElementById('cartModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('cartModal')) closeCart();
-});
-
-// Init
+renderFilters();
 renderProducts();
+renderStores();
+observeReveals();
 </script>
 </body>
 </html>
