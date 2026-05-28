@@ -24,12 +24,32 @@
     --radius: 8px;
     --nav: 76px;
   }
+  @font-face {
+    font-family: "Proxima Nova";
+    src: local("Proxima Nova"), local("ProximaNova-Regular");
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: "Proxima Nova";
+    src: local("Proxima Nova Semibold"), local("ProximaNova-Semibold");
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: "Proxima Nova";
+    src: local("Proxima Nova Bold"), local("ProximaNova-Bold");
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: "Proxima Nova";
+    src: local("Proxima Nova Black"), local("ProximaNova-Black");
+    font-weight: 900;
+  }
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    font-family: "Proxima Nova", "Montserrat", Arial, sans-serif;
+    font-family: "Proxima Nova", Arial, sans-serif;
     color: var(--green);
     background:
       linear-gradient(90deg, rgba(215,0,33,.06) 1px, transparent 1px),
@@ -57,33 +77,47 @@
       var(--white);
   }
   .custom-cursor,
-  .cursor-ring {
+  .cursor-trail {
     position: fixed;
     left: 0;
     top: 0;
     z-index: 120;
     pointer-events: none;
-    display: none;
+    opacity: 0;
     transform: translate(-50%, -50%);
   }
   .custom-cursor {
-    width: 10px;
-    aspect-ratio: 1;
-    border-radius: 50%;
+    width: 24px;
+    height: 34px;
+    border-radius: 58% 42% 54% 46% / 64% 58% 42% 36%;
+    background:
+      radial-gradient(ellipse at 28% 22%, var(--white-74) 0 10%, transparent 11%),
+      radial-gradient(ellipse at 72% 78%, rgba(41,95,47,.34) 0 22%, transparent 23%),
+      var(--red);
+    box-shadow: inset -6px -9px 0 rgba(41,95,47,.22), inset 3px 4px 0 rgba(255,255,255,.16), 0 0 18px var(--red), 0 0 34px var(--yellow);
+    transition: opacity .16s ease, width .18s ease, height .18s ease;
+  }
+  .custom-cursor::after {
+    content: "";
+    position: absolute;
+    inset: 10% 43%;
+    border-radius: 999px;
     background: var(--yellow);
-    box-shadow: 0 0 14px var(--yellow), 0 0 26px var(--red);
+    transform: rotate(10deg);
+    opacity: .9;
   }
-  .cursor-ring {
-    width: 38px;
-    aspect-ratio: 1;
-    border: 1px solid var(--red);
-    border-radius: 50%;
-    box-shadow: 0 0 18px var(--red-16), inset 0 0 16px var(--red-08);
-    transition: width .18s ease, opacity .18s ease;
+  .custom-cursor.active { width: 30px; height: 42px; }
+  .cursor-trail {
+    width: 14px;
+    height: 20px;
+    border-radius: 58% 42% 54% 46% / 64% 58% 42% 36%;
+    background: var(--yellow);
+    box-shadow: 0 0 18px var(--yellow);
+    mix-blend-mode: screen;
   }
-  .cursor-ring.active { width: 54px; opacity: .8; }
+  .custom-cursor.visible, .cursor-trail.visible { opacity: 1; }
   @media (pointer: fine) {
-    .custom-cursor, .cursor-ring { display: block; }
+    .custom-cursor, .cursor-trail { display: block; }
   }
   .topbar {
     position: fixed;
@@ -91,10 +125,10 @@
     z-index: 30;
     height: var(--nav);
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: 24px;
-    padding: 0 clamp(16px, 4vw, 64px);
+    gap: clamp(14px, 3vw, 34px);
+    padding: 0 clamp(14px, 4vw, 54px);
     background: rgba(215, 0, 33, .9);
     backdrop-filter: blur(20px) saturate(1.2);
     border-bottom: 1px solid var(--white-18);
@@ -108,23 +142,24 @@
     letter-spacing: .01em;
     color: var(--white);
     white-space: nowrap;
+    min-width: 0;
   }
   .brand-mark {
-    width: 132px;
-    height: 58px;
+    width: 128px;
+    height: 48px;
     display: block;
     overflow: hidden;
-    background: var(--red);
-    border: 1px solid var(--white-18);
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: var(--radius);
-    box-shadow: 0 10px 24px rgba(41,95,47,.22), 0 0 22px rgba(255,255,255,.18);
+    box-shadow: none;
   }
   .brand-mark img {
     width: 100%;
     height: 100%;
     object-fit: contain;
     object-position: center;
-    filter: saturate(1.08) contrast(1.04);
+    filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(255,255,255,.5)) drop-shadow(0 0 22px rgba(248,194,49,.26));
   }
   .brand-name {
     max-width: 0;
@@ -134,9 +169,9 @@
   .navlinks {
     display: flex;
     justify-content: center;
-    gap: clamp(14px, 2vw, 32px);
+    gap: clamp(12px, 1.7vw, 28px);
     font-size: .82rem;
-    font-weight: 800;
+    font-weight: 600;
     letter-spacing: .07em;
     text-transform: uppercase;
   }
@@ -200,7 +235,7 @@
     padding: 0 20px;
     border: 1px solid transparent;
     border-radius: 999px;
-    font-weight: 900;
+    font-weight: 700;
     position: relative;
     overflow: hidden;
     transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
@@ -372,6 +407,7 @@
     font-size: clamp(3.1rem, 8vw, 7rem);
     line-height: .9;
     letter-spacing: 0;
+    font-weight: 900;
     text-shadow: 0 0 24px rgba(215,0,33,.38), 0 0 42px rgba(248,194,49,.2);
   }
   .intro-copy p {
@@ -541,6 +577,7 @@
     font-size: clamp(2.5rem, 6vw, 5.4rem);
     line-height: .96;
     letter-spacing: 0;
+    font-weight: 900;
     text-shadow: 0 0 24px rgba(215,0,33,.12);
   }
   .lead {
@@ -713,6 +750,7 @@
     font-size: clamp(2rem, 4vw, 3.7rem);
     line-height: 1;
     letter-spacing: 0;
+    font-weight: 900;
   }
   .section-head p { max-width: 520px; margin: 12px 0 0; color: var(--green-72); line-height: 1.6; }
 
@@ -903,7 +941,7 @@
 
   .visual-section {
     padding: 0;
-    min-height: 560px;
+    min-height: 640px;
     display: grid;
     place-items: center;
     position: relative;
@@ -915,6 +953,27 @@
       var(--red);
     background-size: 56px 56px;
   }
+  .visual-section::before,
+  .visual-section::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .visual-section::before {
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(41,95,47,.62), rgba(215,0,33,.28)),
+      url("assets/patron-marca.jpeg");
+    background-size: auto, 220px auto;
+    background-blend-mode: multiply;
+    opacity: .46;
+    mix-blend-mode: screen;
+  }
+  .visual-section::after {
+    inset: 0;
+    background: linear-gradient(90deg, rgba(41,95,47,.84), transparent 42%, rgba(215,0,33,.58));
+  }
   .visual-section img {
     position: absolute;
     inset: 0;
@@ -922,11 +981,11 @@
     height: 120%;
     object-fit: cover;
     transform: translateY(calc(var(--photo-shift, 0) * -80px));
-    opacity: .58;
+    opacity: .9;
   }
   .visual-copy {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     width: min(900px, calc(100% - 32px));
     text-align: center;
     padding: 80px 0;
@@ -1075,9 +1134,12 @@
     .footer-grid { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 560px) {
-    .brand-mark { width: 104px; height: 46px; }
+    .brand-mark { width: 108px; height: 42px; }
     .nav-actions .btn { display: none; }
     .harvest-stage { height: 260vh; }
+    .harvest-sticky::before, .harvest-sticky::after, .app-hero::after { animation: none; }
+    .leaf-pattern { opacity: .16; }
+    .bean { will-change: transform; }
     .intro-copy h1 { font-size: clamp(2.8rem, 15vw, 4.5rem); }
     .coffee-tree { left: -118px; bottom: 160px; width: 300px; height: 460px; opacity: .58; }
     .basket { width: min(245px, 72vw); }
@@ -1088,16 +1150,18 @@
     .product-grid { grid-template-columns: 1fr; }
     .product-card { min-height: 390px; }
     .footer-grid { grid-template-columns: 1fr; }
+    .visual-section { min-height: 560px; }
+    .visual-section img { height: 100%; transform: none; }
   }
 </style>
 </head>
 <body>
 <div class="custom-cursor" id="customCursor" aria-hidden="true"></div>
-<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+<div class="cursor-trail" id="cursorTrail" aria-hidden="true"></div>
 <header class="topbar">
   <a class="brand" href="#inicio" aria-label="Inicio Juan Valdez">
     <span class="brand-mark" aria-hidden="true">
-      <img src="assets/juan-valdez-logo-crop.png" alt="">
+      <img src="assets/juan-valdez-logo-oficial.png" alt="">
     </span>
     <span class="brand-name">Juan Valdez</span>
   </a>
@@ -1291,7 +1355,7 @@
   </section>
 
   <section class="visual-section" aria-label="Cierre visual">
-    <img src="assets/empaque-volcan-nuevo.jpeg" alt="Empaque Juan Valdez Volcán fuerte sobre mesa de café">
+    <img src="assets/cosecha-final.jpeg" alt="Recolector llevando una canasta de cerezas de café entre hojas verdes">
     <div class="visual-copy reveal">
       <p class="eyebrow">Descubre, pide, acumula</p>
       <h2>Juan Valdez se mueve contigo.</h2>
@@ -1333,16 +1397,39 @@
 
 <script>
 const customCursor = document.getElementById("customCursor");
-const cursorRing = document.getElementById("cursorRing");
-if (matchMedia("(pointer: fine)").matches && customCursor && cursorRing) {
+const cursorTrail = document.getElementById("cursorTrail");
+if (matchMedia("(pointer: fine)").matches && customCursor && cursorTrail) {
+  let pointerX = innerWidth / 2;
+  let pointerY = innerHeight / 2;
+  let beanX = pointerX;
+  let beanY = pointerY;
+  let trailX = pointerX;
+  let trailY = pointerY;
+  let lastX = pointerX;
+  let lastY = pointerY;
+  function moveCoffeeCursor() {
+    beanX += (pointerX - beanX) * .32;
+    beanY += (pointerY - beanY) * .32;
+    trailX += (beanX - trailX) * .16;
+    trailY += (beanY - trailY) * .16;
+    const angle = Math.atan2(beanY - lastY, beanX - lastX) * 180 / Math.PI + 90;
+    customCursor.style.transform = `translate(${beanX}px, ${beanY}px) translate(-50%, -50%) rotate(${angle}deg)`;
+    cursorTrail.style.transform = `translate(${trailX}px, ${trailY}px) translate(-50%, -50%) rotate(${angle}deg)`;
+    lastX = beanX;
+    lastY = beanY;
+    requestAnimationFrame(moveCoffeeCursor);
+  }
   addEventListener("mousemove", event => {
-    customCursor.style.transform = `translate(${event.clientX}px, ${event.clientY}px) translate(-50%, -50%)`;
-    cursorRing.style.transform = `translate(${event.clientX}px, ${event.clientY}px) translate(-50%, -50%)`;
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+    customCursor.classList.add("visible");
+    cursorTrail.classList.add("visible");
   }, { passive: true });
   document.querySelectorAll("a, button, input, select").forEach(el => {
-    el.addEventListener("mouseenter", () => cursorRing.classList.add("active"));
-    el.addEventListener("mouseleave", () => cursorRing.classList.remove("active"));
+    el.addEventListener("mouseenter", () => customCursor.classList.add("active"));
+    el.addEventListener("mouseleave", () => customCursor.classList.remove("active"));
   });
+  moveCoffeeCursor();
 }
 
 const beansLayer = document.getElementById("fallingBeans");
@@ -1379,23 +1466,37 @@ const stores = [
 let currentCategory = "Todo";
 let cart = [];
 
+let scrollTicking = false;
+const reduceMobileMotion = matchMedia("(max-width: 560px)").matches;
 function updateScrollVisuals() {
   const stage = document.querySelector(".harvest-stage");
   const rect = stage.getBoundingClientRect();
   const max = stage.offsetHeight - innerHeight;
   const progress = Math.min(1, Math.max(0, -rect.top / max));
-  updateBeanTargets();
   document.documentElement.style.setProperty("--intro-progress", progress.toFixed(3));
   const visual = document.querySelector(".visual-section");
-  if (visual) {
+  if (visual && !reduceMobileMotion) {
     const v = visual.getBoundingClientRect();
     const shift = Math.min(1, Math.max(0, (innerHeight - v.top) / (innerHeight + v.height)));
     document.documentElement.style.setProperty("--photo-shift", shift.toFixed(3));
   }
 }
-addEventListener("scroll", updateScrollVisuals, { passive: true });
-addEventListener("resize", updateScrollVisuals);
-updateScrollVisuals();
+function requestScrollVisuals() {
+  if (scrollTicking) return;
+  scrollTicking = true;
+  requestAnimationFrame(() => {
+    updateScrollVisuals();
+    scrollTicking = false;
+  });
+}
+function refreshVisualGeometry() {
+  updateBeanTargets();
+  updateScrollVisuals();
+}
+addEventListener("scroll", requestScrollVisuals, { passive: true });
+addEventListener("resize", refreshVisualGeometry);
+addEventListener("orientationchange", refreshVisualGeometry);
+refreshVisualGeometry();
 
 function updateBeanTargets() {
   const layer = document.getElementById("fallingBeans");
